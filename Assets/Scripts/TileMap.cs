@@ -8,6 +8,7 @@ public class TileMap : MonoBehaviour {
 
     public TileType[] tilesTypes;
     int[,] tiles;
+    Node[,] graph;
 
     int mapSizeX = 10;
     int mapSizeY = 10;
@@ -57,6 +58,48 @@ public class TileMap : MonoBehaviour {
         tiles[8, 6] = 2;
     }
 
+    class Node
+    {
+        public List<Node> neighbours;
+        
+        public Node()
+        {
+            neighbours = new List<Node>();
+        }
+    }
+
+    
+
+    void GeneratePathfindingGraph()
+    {
+        graph = new Node[mapSizeX, mapSizeY];
+        for(int x = 0; x < mapSizeX; x++)
+        {
+            for(int y = 0; y < mapSizeY; y++)
+            {
+                // we have a 4-way connected map
+                // this also works with 6-way hexes
+                
+                if(x > 0)
+                {
+                    graph[x, y].neighbours.Add(graph[x - 1, y]);
+                }
+                if(x < mapSizeX - 1)
+                {
+                    graph[x, y].neighbours.Add(graph[x + 1, y]);
+                }
+                if (y > 0)
+                {
+                    graph[x, y].neighbours.Add(graph[x, y - 1]);
+                }
+                if (y < mapSizeX - 1)
+                {
+                    graph[x, y].neighbours.Add(graph[x, y + 1]);
+                }
+            }
+        }
+    }
+
     void GenerateMapVisuals()
     {
         // initialize map tiles
@@ -75,6 +118,9 @@ public class TileMap : MonoBehaviour {
         }
     }
 
+
+
+
     public Vector3 TileCoordtoWorldCoord(int x, int y)
     {
         return new Vector3(x, y, 0);
@@ -83,9 +129,12 @@ public class TileMap : MonoBehaviour {
     public void MoveSelectedUnitTo(int x, int y)
     {
         // data
-        selectedUnit.GetComponent<Unit>().tileX = x;
-        selectedUnit.GetComponent<Unit>().tileY = y;
+        //selectedUnit.GetComponent<Unit>().tileX = x;
+        //selectedUnit.GetComponent<Unit>().tileY = y;
         // visual
-        selectedUnit.transform.position = TileCoordtoWorldCoord(x, y);
+        //selectedUnit.transform.position = TileCoordtoWorldCoord(x, y);
+
+
+
     }
 }
