@@ -7,10 +7,11 @@ public class MouseManager : MonoBehaviour {
 
 
     public bool mapMaking;
+    public MapMaker mapMaker;
 
-	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+    {
+        mapMaker = FindObjectOfType<MapMaker>().GetComponent<MapMaker>();	
 	}
 	
 	// Update is called once per frame

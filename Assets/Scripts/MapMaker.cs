@@ -6,6 +6,9 @@ public class MapMaker : MonoBehaviour {
 
     public GameObject hexPrefab;
 
+    public TileType[] tilesTypes;
+
+
     // size of map in terms of number of hex tiles
     int width = 8;
     int height = 8;
