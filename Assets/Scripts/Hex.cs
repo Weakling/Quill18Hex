@@ -4,33 +4,33 @@ using UnityEngine;
 
 public class Hex : MonoBehaviour {
 
-    public int x, y;
+    public int x, z, y;
 
     public GameObject upLeftHex, upRightHex, downLeftHex, downRighthex, leftHex, rightHex;
 
     public Hex[] GetNeighbours()
     {
         // left hex
-        GameObject leftHex = GameObject.Find("Hex_" + (x - 1) + "-" + y);
+        GameObject leftHex = GameObject.Find("Hex_" + (x - 1) + "-" + z);
         // right hex
-        GameObject rightHex = GameObject.Find("Hex_" + (x + 1) + "-" + y);
+        GameObject rightHex = GameObject.Find("Hex_" + (x + 1) + "-" + z);
 
         // upper hexes
-        if(y % 2 == 1)
+        if(z % 2 == 1)
         {
-            GameObject upLeftHex = GameObject.Find("Hex_" + (x) + "-" + (y + 1));
-            GameObject upRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (y + 1));
-            GameObject downLeftHex = GameObject.Find("Hex_" + (x) + "-" + (y - 1));
-            GameObject downRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (y - 1));
+            GameObject upLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
+            GameObject upRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z + 1));
+            GameObject downLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
+            GameObject downRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z - 1));
 
             GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
         }
         else
         {
-            GameObject upLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (y + 1));
-            GameObject upRightHex = GameObject.Find("Hex_" + (x) + "-" + (y + 1));
-            GameObject downLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (y - 1));
-            GameObject downRightHex = GameObject.Find("Hex_" + (x) + "-" + (y - 1));
+            GameObject upLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z + 1));
+            GameObject upRightHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
+            GameObject downLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z - 1));
+            GameObject downRightHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
 
             GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
         }

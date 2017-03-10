@@ -64,11 +64,27 @@ public class MouseManager : MonoBehaviour {
             // MAP MAKING..
             if (mapMaking)
             {
+                // hit default hex
                 if (ourHitObject.name == "default")
                 {
-                    GameObject gO = (GameObject)Instantiate(mapMaker.tilesTypes[0].tileVisualPrefab, ourHitObject.transform.position, Quaternion.identity);
-                    gO.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.green;
-                    Destroy(ourHitObject);
+                    // instantiate new tile
+                    GameObject newGo = (GameObject)Instantiate(mapMaker.tilesTypes[0].tileVisualPrefab, ourHitObject.transform.position, Quaternion.identity);
+                    // get components
+                    Hex newGoHexScript = newGo.transform.GetComponent<Hex>();
+                    Hex ourHitEmptyHexScript = ourHitObject.GetComponentInParent<Hex>();
+
+                    // set array stuff
+                    newGoHexScript.x = ourHitEmptyHexScript.x;
+                    newGoHexScript.y = ourHitEmptyHexScript.y;
+                    newGoHexScript.z = ourHitEmptyHexScript.z;
+
+                    ourHitEmptyHexScript.y = ourHitEmptyHexScript.y + 1;
+                    mapMaker.hexMapArray[newGoHexScript.x, newGoHexScript.y, newGoHexScript.z] = newGoHexScript;
+                    mapMaker.hexMapArray[ourHitEmptyHexScript.x, ourHitEmptyHexScript.y, ourHitEmptyHexScript.z] = ourHitEmptyHexScript;
+
+
+                    ourHitObject.transform.parent.position = new Vector3(ourHitObject.transform.parent.position.x, ourHitObject.transform.parent.position.y + mapMaker.yOffset, ourHitObject.transform.parent.position.z);     
+                                                                           
                 }
             }
 
@@ -81,7 +97,16 @@ public class MouseManager : MonoBehaviour {
         // right click..
         if (Input.GetMouseButtonDown(1))
         {
-
+            // MAP MAKING..
+            if (mapMaking)
+            {
+                if (ourHitObject.name == "default")
+                {
+                    Hex ourHitEmptyHexScript = ourHitObject.GetComponentInParent<Hex>();
+                    mapMaker.hexMapArray[ourHitEmptyHexScript.x, ourHitEmptyHexScript.y, ourHitEmptyHexScript.z] = gameObject;
+                    ourHitObject.transform.parent.position = new Vector3(ourHitObject.transform.parent.position.x, ourHitObject.transform.parent.position.y + mapMaker.yOffset, ourHitObject.transform.parent.position.z);
+                }
+            }
         }
         //MeshRenderer mr = ourHitObject.GetComponentInChildren<MeshRenderer>();
 
