@@ -16,7 +16,8 @@ public class MapMaker : MonoBehaviour {
     //float xOffset = 0.882f;
     //float zOffset = 0.764f;
     float xOffset = 1f;
-    float zOffset = .865f;
+    float zOffset = 0.865f;
+    float yOffset = 0.234f;
 
     void Start ()
     {

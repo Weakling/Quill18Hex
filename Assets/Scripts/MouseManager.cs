@@ -50,28 +50,43 @@ public class MouseManager : MonoBehaviour {
                     MouseOverUnit(ourHitObject);
                 }
             }
+
+            
         }
 
     }
 
     void MouseClickHex(GameObject ourHitObject)
     {
+        // left click..
+        if (Input.GetMouseButtonDown(0))
+        {
+            // MAP MAKING..
+            if (mapMaking)
+            {
+                if (ourHitObject.name == "default")
+                {
+                    GameObject gO = (GameObject)Instantiate(mapMaker.tilesTypes[0].tileVisualPrefab, ourHitObject.transform.position, Quaternion.identity);
+                    gO.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.green;
+                    Destroy(ourHitObject);
+                }
+            }
 
+
+            if (selectedUnit != null)
+            {
+                selectedUnit.destination = ourHitObject.transform.position;
+            }
+        }
+        // right click..
+        if (Input.GetMouseButtonDown(1))
+        {
+
+        }
         //MeshRenderer mr = ourHitObject.GetComponentInChildren<MeshRenderer>();
 
         //ourHitObject.GetComponent<MeshRenderer>().materials[0].color = Color.red;
         //ourHitObject.transform.parent.GetComponent<Hex>().GetNeighbours();
-        if(ourHitObject.name == "default")
-        {
-            GameObject gO = (GameObject)Instantiate(mapMaker.tilesTypes[0].tileVisualPrefab, ourHitObject.transform.position, Quaternion.identity);
-            gO.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.green;
-            Destroy(ourHitObject);
-        }
-
-        if(selectedUnit != null)
-        {
-            selectedUnit.destination = ourHitObject.transform.position;
-        }
 
         //mr.materials[0].color = Color.red;
 
