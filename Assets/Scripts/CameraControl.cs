@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 
-    public float currentRotation;
+    public float currentRotationX;
+    public float currentRotationY;
     private bool rotationOn;
+    private float rotationSpeed;
     public float moveSpeed;
     public float moveVelocityX, moveVelocityY, moveVelocityZ;
     public Rigidbody myRigidBody;
@@ -13,7 +15,8 @@ public class CameraControl : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        myRigidBody = GetComponent<Rigidbody>();	
+        myRigidBody = GetComponent<Rigidbody>();
+        rotationSpeed = .75f;
 	}
 	
 	void Update ()
@@ -29,37 +32,59 @@ public class CameraControl : MonoBehaviour {
         {
             rotationOn = false;
         }
-        // velocity sets
-        moveVelocityX = Input.GetAxisRaw("Horizontal");
-        moveVelocityZ = Input.GetAxisRaw("Vertical");
+        // up
         if(Input.GetKey(KeyCode.E))
         {
             if(rotationOn)
             {
-                currentRotation = currentRotation - 0.5f;
-                this.gameObject.transform.eulerAngles = new Vector3(currentRotation, this.transform.rotation.y);
+                currentRotationX = currentRotationX - rotationSpeed;
+                this.gameObject.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
             }
             else
             {
                 moveVelocityY = moveSpeed;
             }
         }
+        // down
         else if(Input.GetKey(KeyCode.Q))
         {
             if (rotationOn)
             {
-                currentRotation = currentRotation + 0.5f;
-                this.gameObject.transform.eulerAngles = new Vector3(currentRotation, this.transform.rotation.y);
+                currentRotationX = currentRotationX + rotationSpeed;
+                this.gameObject.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
             }
             else
             {
                 moveVelocityY = -moveSpeed;
             }
         }
+        // kill y velocity when not using it
         else
         {
             moveVelocityY = 0;
         }
+        // velocity sets
+        moveVelocityX = Input.GetAxisRaw("Horizontal");
+        moveVelocityZ = Input.GetAxisRaw("Vertical");
+        if (rotationOn)
+        {
+            //Vector3 v3 = new Vector3 (moveVelocityX, 0f, 0f);
+            //this.transform.Rotate(v3, moveSpeed * Time.deltaTime);
+            if(moveVelocityX > 0)
+            {
+                currentRotationY = currentRotationY + rotationSpeed;
+                this.gameObject.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
+            }
+            else if(moveVelocityX < 0)
+            {
+                currentRotationY = currentRotationY - rotationSpeed;
+                this.gameObject.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
+            }
+
+        }
+        else
+        
+        
         myRigidBody.velocity = new Vector3(moveVelocityX * moveSpeed, moveVelocityY, moveVelocityZ * moveSpeed);
         #endregion
 

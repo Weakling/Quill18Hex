@@ -34,24 +34,21 @@ public class MouseManager : MonoBehaviour {
             GameObject ourHitObject = hitInfo.collider.transform.gameObject;
             //Debug.Log("Raycast hit: " + hitInfo.collider.transform.parent.name);
             //Debug.Log("hit something :" + hitInfo.collider.transform.parent.name);
-
-            if (Input.GetMouseButtonDown(0))
+            // over a hex..
+            if (ourHitObject.transform.parent.GetComponent<Hex>() != null)
             {
-                // over a hex..
-                if (ourHitObject.transform.parent.GetComponent<Hex>() != null)
-                {
-                    Debug.Log("hex");
-                    MouseClickHex(ourHitObject);
-                }
-                // over a unit..
-                else if(ourHitObject.transform.parent.GetComponent<Unit>() != null)
-                {
-                    Debug.Log(ourHitObject.name);
-                    MouseOverUnit(ourHitObject);
-                }
+                //Debug.Log("hex");
+                MouseClickHex(ourHitObject);
+            }
+            // over a unit..
+            else if (ourHitObject.transform.parent.GetComponent<Unit>() != null)
+            {
+                //Debug.Log(ourHitObject.name);
+                MouseOverUnit(ourHitObject);
             }
 
-            
+
+
         }
 
     }
@@ -97,14 +94,19 @@ public class MouseManager : MonoBehaviour {
         // right click..
         if (Input.GetMouseButtonDown(1))
         {
+            Debug.Log("Moo you");
             // MAP MAKING..
             if (mapMaking)
             {
                 if (ourHitObject.name == "default")
                 {
+                    // get empty tile component
                     Hex ourHitEmptyHexScript = ourHitObject.GetComponentInParent<Hex>();
-                    mapMaker.hexMapArray[ourHitEmptyHexScript.x, ourHitEmptyHexScript.y, ourHitEmptyHexScript.z] = gameObject;
-                    ourHitObject.transform.parent.position = new Vector3(ourHitObject.transform.parent.position.x, ourHitObject.transform.parent.position.y + mapMaker.yOffset, ourHitObject.transform.parent.position.z);
+                    ourHitEmptyHexScript.y = ourHitEmptyHexScript.y - 1;
+
+                    Destroy(mapMaker.hexMapArray[ourHitEmptyHexScript.x, ourHitEmptyHexScript.y, ourHitEmptyHexScript.z].gameObject);
+                    mapMaker.hexMapArray[ourHitEmptyHexScript.x, ourHitEmptyHexScript.y, ourHitEmptyHexScript.z] = ourHitEmptyHexScript;
+                    ourHitEmptyHexScript.transform.position = new Vector3 (ourHitEmptyHexScript.transform.position.x, ourHitEmptyHexScript.y * mapMaker.yOffset, ourHitEmptyHexScript.transform.position.z);
                 }
             }
         }
