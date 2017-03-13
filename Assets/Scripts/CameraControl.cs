@@ -4,27 +4,33 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 
-    public float currentRotationX;
-    public float currentRotationY;
+    private float currentRotationX, currentRotationY;
     private bool rotationOn;
     private float rotationSpeed;
     public float moveSpeed;
-    public float moveVelocityX, moveVelocityY, moveVelocityZ;
-    public Rigidbody myRigidBody;
+    private float moveVelocityX, moveVelocityZ;
+    public Transform leftTarget, rightTarget, forwardTarget, backwardTarget, downTarget, upTarget;
+
 
 	// Use this for initialization
 	void Start ()
     {
-        myRigidBody = GetComponent<Rigidbody>();
+        leftTarget = transform.GetChild(0);
+        rightTarget = transform.GetChild(1);
+        forwardTarget = transform.GetChild(2);
+        backwardTarget = transform.GetChild(3);
+        downTarget = transform.GetChild(4);
+        upTarget = transform.GetChild(5);
+
+        currentRotationX = 14;
+        currentRotationY = 0;
         rotationSpeed = .75f;
 	}
 	
 	void Update ()
     {
-        // movement and rotation
-        #region
-        // rotation bool
-        if(Input.GetKey(KeyCode.Space))
+        // check rotation
+        if (Input.GetKey(KeyCode.Space))
         {
             rotationOn = true;
         }
@@ -32,21 +38,32 @@ public class CameraControl : MonoBehaviour {
         {
             rotationOn = false;
         }
+        // velocity sets
+        moveVelocityX = Input.GetAxisRaw("Horizontal");
+        moveVelocityZ = Input.GetAxisRaw("Vertical");
+
+        // que movement
+        CameraMove();
+    }
+
+    void CameraMove()
+    {
+        // vertical move
         // up
-        if(Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
         {
-            if(rotationOn)
+            if (rotationOn)
             {
                 currentRotationX = currentRotationX - rotationSpeed;
                 this.gameObject.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
             }
             else
             {
-                moveVelocityY = moveSpeed;
+                this.transform.position = Vector3.MoveTowards(transform.position, upTarget.position, moveSpeed * Time.deltaTime);
             }
         }
         // down
-        else if(Input.GetKey(KeyCode.Q))
+        else if (Input.GetKey(KeyCode.Q))
         {
             if (rotationOn)
             {
@@ -55,42 +72,53 @@ public class CameraControl : MonoBehaviour {
             }
             else
             {
-                moveVelocityY = -moveSpeed;
+                this.transform.position = Vector3.MoveTowards(transform.position, downTarget.position, moveSpeed * Time.deltaTime);
             }
         }
-        // kill y velocity when not using it
-        else
+        // horizontal
+        // moving right..
+        if (moveVelocityX > 0)
         {
-            moveVelocityY = 0;
-        }
-        // velocity sets
-        moveVelocityX = Input.GetAxisRaw("Horizontal");
-        moveVelocityZ = Input.GetAxisRaw("Vertical");
-        if (rotationOn)
-        {
-            //Vector3 v3 = new Vector3 (moveVelocityX, 0f, 0f);
-            //this.transform.Rotate(v3, moveSpeed * Time.deltaTime);
-            if(moveVelocityX > 0)
+            if(rotationOn)
             {
                 currentRotationY = currentRotationY + rotationSpeed;
                 this.gameObject.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
             }
-            else if(moveVelocityX < 0)
+            else
+            {
+                this.transform.position = Vector3.MoveTowards(transform.position, rightTarget.position, moveSpeed * Time.deltaTime);
+            }
+        }
+        // moving left..
+        else if (moveVelocityX < 0)
+        {
+            if(rotationOn)
             {
                 currentRotationY = currentRotationY - rotationSpeed;
                 this.gameObject.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
             }
-
+            else
+            {
+                this.transform.position = Vector3.MoveTowards(transform.position, leftTarget.position, moveSpeed * Time.deltaTime);
+            }
         }
-        else
-        
-        
-        myRigidBody.velocity = new Vector3(moveVelocityX * moveSpeed, moveVelocityY, moveVelocityZ * moveSpeed);
-        #endregion
+        // moving forward..
+        if(moveVelocityZ > 0)
+        {
+            this.transform.position = Vector3.MoveTowards(transform.position, forwardTarget.position, moveSpeed * Time.deltaTime);
+        }
+        // moving backward..
+        else if (moveVelocityZ < 0)
+        {
+            this.transform.position = Vector3.MoveTowards(transform.position, backwardTarget.position, moveSpeed * Time.deltaTime);
+        }
 
-        // 
-        #region
-        
-        #endregion
+        //Vector3 v3 = new Vector3 (moveVelocityX, 0f, 0f);
+        //this.transform.Rotate(v3, moveSpeed * Time.deltaTime);
+    }
+
+    void CameraRotate()
+    {
+
     }
 }

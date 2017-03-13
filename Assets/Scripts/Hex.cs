@@ -8,6 +8,11 @@ public class Hex : MonoBehaviour {
 
     public GameObject upLeftHex, upRightHex, downLeftHex, downRighthex, leftHex, rightHex;
 
+    private void Start()
+    {
+  
+    }
+
     public Hex[] GetNeighbours()
     {
         // left hex

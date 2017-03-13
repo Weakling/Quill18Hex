@@ -5,6 +5,7 @@ using UnityEngine;
 public class MapMaker : MonoBehaviour {
 
     public GameObject hexPrefab;
+    public GameObject hexToInstantiate;
     public TileType[] tilesTypes;
     public Hex[,,] hexMapArray;
 
@@ -22,10 +23,16 @@ public class MapMaker : MonoBehaviour {
 
     void Start ()
     {
+        // grab real hex
+        hexToInstantiate = tilesTypes[0].tileVisualPrefab;
+
+        // instantiate array
         hexMapArray = new Hex[xWidth, yTall, zHeight];
-        for (int x = 0; x < xWidth; x++)
+
+        // fill map..
+        for (int x = 1; x < xWidth; x++)
         {
-            for (int z = 0; z < zHeight; z++)
+            for (int z = 1; z < zHeight; z++)
             {
                 float xPos = x * xOffset;
                 // are we on an odd row?
@@ -34,19 +41,15 @@ public class MapMaker : MonoBehaviour {
                     xPos += xOffset / 2f;
                 }
                 // hex gameobject info
-                GameObject hex_go = (GameObject)Instantiate(hexPrefab, new Vector3(xPos, 0, z * zOffset), Quaternion.identity); // instantiate
+                GameObject hex_go = (GameObject)Instantiate(hexPrefab, new Vector3(xPos, 1, z * zOffset), Quaternion.identity); // instantiate
                 hex_go.name = "Hex_" + x + "-" + z;                                                                             // set name to reletive position
                 hex_go.transform.SetParent(this.transform);                                                                     // set parent for clean up              
                 // hex map info
                 hex_go.GetComponent<Hex>().x = x;
                 hex_go.GetComponent<Hex>().z = z;
-                hexMapArray[x, 0, z] = hex_go.GetComponent<Hex>();   // set in array
+                hexMapArray[x, 1, z] = hex_go.GetComponent<Hex>();   // set in array 
             }
         }
 	}
-	
-	void Update ()
-    {
-        
-    }
+
 }
