@@ -11,9 +11,9 @@ public class MapMaker : MonoBehaviour {
 
 
     // size of map in terms of number of hex tiles
-    int xWidth = 8;
-    int zHeight = 8;
-    int yTall = 8;
+    public int xWidth = 8;
+    public int zHeight = 8;
+    public int yTall = 8;
 
     //float xOffset = 0.882f;
     //float zOffset = 0.764f;
