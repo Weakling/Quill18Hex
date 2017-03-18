@@ -10,7 +10,7 @@ public class Hex : MonoBehaviour {
 
     private void Start()
     {
-  
+        
     }
 
     public Hex[] GetNeighbours()

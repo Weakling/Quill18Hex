@@ -7,16 +7,13 @@ public class ReadWriteText : MonoBehaviour {
 
     private string[] tileNames;
     private MapMaker mapMaker;
+    public GameObject grassTile;
+    public GameObject emptyTile;
 
 	// Use this for initialization
 	void Start ()
     {
         mapMaker = FindObjectOfType<MapMaker>().GetComponent<MapMaker>();
-        tileNames = new string[4];
-        tileNames[0] = "I'm number one";
-        tileNames[1] = "I'm number two";
-        tileNames[2] = "I'm number three";
-        tileNames[3] = "I'm number WHAT";
 
         //SaveToFile();
         //ReadFromFile();
@@ -95,6 +92,8 @@ public class ReadWriteText : MonoBehaviour {
                     while (x < mapMaker.xWidth)
                     {
                         s = reader.ReadLine();
+                        int myInt = int.Parse(s);
+                        MakeTile(myInt, x, y, z);
                         x++;
                         Debug.Log(s);
                     }
@@ -110,8 +109,18 @@ public class ReadWriteText : MonoBehaviour {
         //}
     }
 
-    private void MakeTile()
+    private void MakeTile(int type, int x, int y, int z)
     {
-
+        if(type == 0)
+        {
+            GameObject newHex = Instantiate(emptyTile, mapMaker.hexMapArray[x, y, z].transform.position, Quaternion.identity);
+            mapMaker.hexMapArray[x, y, z] = newHex.GetComponent<Hex>();
+        }
+        else if(type == 1)
+        {
+            Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z].transform.position.x, mapMaker.hexMapArray[x, 1, z].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z].transform.position.z);
+            GameObject newHex = Instantiate(grassTile, pos, Quaternion.identity);
+            mapMaker.hexMapArray[x, y, z] = newHex.GetComponent<Hex>();
+        }
     }
 }

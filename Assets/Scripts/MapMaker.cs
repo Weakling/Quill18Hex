@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class MapMaker : MonoBehaviour {
 
-    public GameObject hexPrefab;
+    public GameObject grassHexPrefab, sandHexPrefab, rockHexPrefab, roadHexPrefab, lavaHexPrefab, snowHexPrefab, swampHexPrefab, dungeonHexPrefab;
+    public GameObject waterHalfHexPrefab, iceHalfHexPrefab, lavaHalfHexPrefab, swampHalfHexPrefab, shadowHalfHexPrefab;
     public GameObject hexToInstantiate;
     public TileType[] tilesTypes;
     public Hex[,,] hexMapArray;
@@ -41,7 +42,7 @@ public class MapMaker : MonoBehaviour {
                     xPos += xOffset / 2f;
                 }
                 // hex gameobject info
-                GameObject hex_go = (GameObject)Instantiate(hexPrefab, new Vector3(xPos, 1, z * zOffset), Quaternion.identity); // instantiate
+                GameObject hex_go = (GameObject)Instantiate(hexToInstantiate, new Vector3(xPos, 1, z * zOffset), Quaternion.identity); // instantiate
                 hex_go.name = "Hex_" + x + "-" + z;                                                                             // set name to reletive position
                 hex_go.transform.SetParent(this.transform);                                                                     // set parent for clean up              
                 // hex map info
