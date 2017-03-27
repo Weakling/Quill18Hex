@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hex : MonoBehaviour {
 
-    public int x, z, y;
+    public int x, z, y, q;
 
     public GameObject upLeftHex, upRightHex, downLeftHex, downRighthex, leftHex, rightHex;
 

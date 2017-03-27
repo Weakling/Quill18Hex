@@ -47,7 +47,16 @@ public class ReadWriteText : MonoBehaviour {
                 x = 1;
                 while (x < mapMaker.xWidth)
                 {
-                    output = SaveInfo(x, y, z);
+
+                    if(mapMaker.hexMapArray[x, y, z, 0] != null)
+                    {
+                        output = SaveInfo(x, y, z, 0);
+                    }
+                    if (mapMaker.hexMapArray[x, y, z, 1] != null)
+                    {
+                        output = SaveInfo(x, y, z, 1);
+                    }
+                    
                     x++;
                     writer.WriteLine(output);
                 }
@@ -58,10 +67,10 @@ public class ReadWriteText : MonoBehaviour {
         writer.Close();
     }
 
-    private char SaveInfo(int x, int y, int z)
+    private char SaveInfo(int x, int y, int z, int q)
     {
-        Debug.Log(mapMaker.hexMapArray[x, y, z]);
-        if (mapMaker.hexMapArray[x, y, z] != null)
+        Debug.Log(mapMaker.hexMapArray[x, y, z, q]);
+        if (mapMaker.hexMapArray[x, y, z, q] != null)
         {
             return '1';
         }
@@ -93,7 +102,7 @@ public class ReadWriteText : MonoBehaviour {
                     {
                         s = reader.ReadLine();
                         int myInt = int.Parse(s);
-                        MakeTile(myInt, x, y, z);
+                        MakeTile(myInt, x, y, z, 0);
                         x++;
                         Debug.Log(s);
                     }
@@ -109,18 +118,18 @@ public class ReadWriteText : MonoBehaviour {
         //}
     }
 
-    private void MakeTile(int type, int x, int y, int z)
+    private void MakeTile(int type, int x, int y, int z, int q)
     {
         if(type == 0)
         {
-            GameObject newHex = Instantiate(emptyTile, mapMaker.hexMapArray[x, y, z].transform.position, Quaternion.identity);
-            mapMaker.hexMapArray[x, y, z] = newHex.GetComponent<Hex>();
+            GameObject newHex = Instantiate(emptyTile, mapMaker.hexMapArray[x, y, z, q].transform.position, Quaternion.identity);
+            mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
         }
         else if(type == 1)
         {
-            Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z].transform.position.x, mapMaker.hexMapArray[x, 1, z].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z].transform.position.z);
+            Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z, q].transform.position.x, mapMaker.hexMapArray[x, 1, z, q].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z, q].transform.position.z);
             GameObject newHex = Instantiate(grassTile, pos, Quaternion.identity);
-            mapMaker.hexMapArray[x, y, z] = newHex.GetComponent<Hex>();
+            mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
         }
     }
 }
