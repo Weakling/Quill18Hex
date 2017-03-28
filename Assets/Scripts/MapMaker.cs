@@ -66,7 +66,6 @@ public class MapMaker : MonoBehaviour {
         
     }
 
-
     void ChangeHexType()
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
@@ -92,6 +91,14 @@ public class MapMaker : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             hexToInstantiate = sandHexPrefab;
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            hexToInstantiate = snowHexPrefab;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            hexToInstantiate = swampHexPrefab;
         }
         else if (Input.GetKeyDown(KeyCode.P))
         {

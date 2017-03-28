@@ -47,18 +47,25 @@ public class ReadWriteText : MonoBehaviour {
                 x = 1;
                 while (x < mapMaker.xWidth)
                 {
-
+                    // default empty hex
+                    output = '0';
+                    // check empty array..
                     if(mapMaker.hexMapArray[x, y, z, 0] != null)
                     {
-                        output = SaveInfo(x, y, z, 0);
+                        output = mapMaker.hexMapArray[x, y, z, 0].typeHex;
                     }
+                    // write q 0
+                    writer.WriteLine(output);
+                    //default empty hex
+                    output = '0';
+                    // check empty array
                     if (mapMaker.hexMapArray[x, y, z, 1] != null)
                     {
-                        output = SaveInfo(x, y, z, 1);
+                        output = mapMaker.hexMapArray[x, y, z, 1].typeHex;
                     }
-                    
-                    x++;
+                    // write q 1
                     writer.WriteLine(output);
+                    x++;
                 }
                 z++;
             }
@@ -67,18 +74,11 @@ public class ReadWriteText : MonoBehaviour {
         writer.Close();
     }
 
-    private char SaveInfo(int x, int y, int z, int q)
+    /*private char SaveInfo(int x, int y, int z, int q)
     {
         Debug.Log(mapMaker.hexMapArray[x, y, z, q]);
-        if (mapMaker.hexMapArray[x, y, z, q] != null)
-        {
-            return '1';
-        }
-        else
-        {
-            return '0';
-        }
-    }
+        return mapMaker.hexMapArray[x, y, z, q].typeHex;
+    }*/
 
     public void ReadFromFile()
     {
@@ -89,7 +89,7 @@ public class ReadWriteText : MonoBehaviour {
         int x = 1;
         int y = 1;
         int z = 1;
-
+        //FIX ALL THIS STUFF HERE
         //while (s != null)
         //{
             while (y < mapMaker.yTall)
@@ -101,7 +101,7 @@ public class ReadWriteText : MonoBehaviour {
                     while (x < mapMaker.xWidth)
                     {
                         s = reader.ReadLine();
-                        int myInt = int.Parse(s);
+                        int myInt = (int) s[0];
                         MakeTile(myInt, x, y, z, 0);
                         x++;
                         Debug.Log(s);
