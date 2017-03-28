@@ -273,14 +273,15 @@ public class MouseManager : MonoBehaviour {
             if (ourHitHexScript.y == 1)
             {
                 //FIX ALL THIS STUFF HERE
-                if(mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 1] == null)
+                if((ourHitHexScript.q == 0 && mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 1] == null) ||
+                    (ourHitHexScript.q == 1 && mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0] == null))
                 {
                     // get empty tile component
-                    Hex ourEmptyHexScript = mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y - 1, ourHitHexScript.z, ourHitHexScript.q];
+                    Hex ourEmptyHexScript = mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y - 1, ourHitHexScript.z, 0];
                     GameObject ourEmptyHex = ourEmptyHexScript.gameObject;
                     // set empty hex array
                     ourEmptyHexScript.y++;                                                                                                   // set empty hex array info y
-                    mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, ourHitHexScript.q] = ourEmptyHexScript;    // set empty hex array
+                    mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0] = ourEmptyHexScript;    // set empty hex array
 
                     // set empty hex position
                     ourEmptyHex.transform.position = new Vector3
