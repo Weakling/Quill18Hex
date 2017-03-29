@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class ReadWriteText : MonoBehaviour {
+public class ReadWriteText : MapMaker {
 
     private string[] tileNames;
     private MapMaker mapMaker;
@@ -101,8 +101,11 @@ public class ReadWriteText : MonoBehaviour {
                     while (x < mapMaker.xWidth)
                     {
                         s = reader.ReadLine();
-                        int myInt = (int) s[0];
-                        MakeTile(myInt, x, y, z, 0);
+                        //int myInt = int.Parse(s);
+                        MakeTile(s, x, y, z, 0);
+                        Debug.Log(s);
+                        s = reader.ReadLine();
+                        MakeTile(s, x, y, z, 1);
                         x++;
                         Debug.Log(s);
                     }
@@ -118,17 +121,21 @@ public class ReadWriteText : MonoBehaviour {
         //}
     }
 
-    private void MakeTile(int type, int x, int y, int z, int q)
+    private void MakeTile(string type, int x, int y, int z, int q)
     {
-        if(type == 0)
+        if (type == "y")
         {
-            GameObject newHex = Instantiate(emptyTile, mapMaker.hexMapArray[x, y, z, q].transform.position, Quaternion.identity);
+            GameObject newHex = Instantiate(defaultHexPrefab, mapMaker.hexMapArray[x, y, z, q].transform.position, Quaternion.identity);
             mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
         }
-        else if(type == 1)
+        else if (type == "0")
+        {
+            return;
+        }
+        else if(type == "1")
         {
             Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z, q].transform.position.x, mapMaker.hexMapArray[x, 1, z, q].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z, q].transform.position.z);
-            GameObject newHex = Instantiate(grassTile, pos, Quaternion.identity);
+            GameObject newHex = Instantiate(dungeonHexPrefab, pos, Quaternion.identity);
             mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
         }
     }

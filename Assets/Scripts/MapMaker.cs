@@ -11,6 +11,7 @@ public class MapMaker : MonoBehaviour {
 
     //public TileType[] tilesTypes;
     public Hex[,,,] hexMapArray;
+    public Transform[,,,] hexPosArray;
 
 
     // size of map in terms of number of hex tiles
@@ -55,7 +56,26 @@ public class MapMaker : MonoBehaviour {
                 hexMapArray[x, 1, z, 0] = hex_go.GetComponent<Hex>();   // set in array 
             }
         }
-	}
+
+        int x = 1;
+        int y = 1;
+        int z = 1;
+        while (y < yTall)
+        {
+            z = 1;
+            while (z < zHeight)
+            {
+                x = 1;
+                while (x < xWidth)
+                {
+                    hexPosArray[x, y, z, 0] = Instantiate(placeHolder;
+                    output = mapMaker.hexMapArray[x, y, z, 1].typeHex;   
+                }
+                z++;
+            }
+            y++;
+        }
+    }
 
 
 

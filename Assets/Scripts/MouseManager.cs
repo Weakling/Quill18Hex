@@ -272,7 +272,6 @@ public class MouseManager : MonoBehaviour {
             // last real hex in its stack..
             if (ourHitHexScript.y == 1)
             {
-                //FIX ALL THIS STUFF HERE
                 if((ourHitHexScript.q == 0 && mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 1] == null) ||
                     (ourHitHexScript.q == 1 && mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0] == null))
                 {
@@ -280,7 +279,7 @@ public class MouseManager : MonoBehaviour {
                     Hex ourEmptyHexScript = mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y - 1, ourHitHexScript.z, 0];
                     GameObject ourEmptyHex = ourEmptyHexScript.gameObject;
                     // set empty hex array
-                    ourEmptyHexScript.y++;                                                                                                   // set empty hex array info y
+                    ourEmptyHexScript.y++;                                                                                   // set empty hex array info y
                     mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0] = ourEmptyHexScript;    // set empty hex array
 
                     // set empty hex position
