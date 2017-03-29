@@ -11,7 +11,8 @@ public class MapMaker : MonoBehaviour {
 
     //public TileType[] tilesTypes;
     public Hex[,,,] hexMapArray;
-    public Transform[,,,] hexPosArray;
+    public GameObject[,,,] hexPosArray;
+    public GameObject placeHolder;
 
 
     // size of map in terms of number of hex tiles
@@ -32,8 +33,9 @@ public class MapMaker : MonoBehaviour {
         // grab real hex
         hexToInstantiate = grassHexPrefab;
 
-        // instantiate array
+        // instantiate arrays
         hexMapArray = new Hex[xWidth, yTall, zHeight, qStacked];
+        hexPosArray = new GameObject[xWidth, yTall, zHeight, qStacked];
 
         // fill map..
         for (int x = 1; x < xWidth; x++)
@@ -57,23 +59,26 @@ public class MapMaker : MonoBehaviour {
             }
         }
 
-        int x = 1;
-        int y = 1;
-        int z = 1;
-        while (y < yTall)
+        int xx = 1;
+        int yy = 1;
+        int zz = 1;
+        while (yy < yTall)
         {
-            z = 1;
-            while (z < zHeight)
+            zz = 1;
+            while (zz < zHeight)
             {
-                x = 1;
-                while (x < xWidth)
+                xx = 1;
+                while (xx < xWidth)
                 {
-                    hexPosArray[x, y, z, 0] = Instantiate(placeHolder;
-                    output = mapMaker.hexMapArray[x, y, z, 1].typeHex;   
+                    // weird y pos calculation due to yy array starting at 1. This starts pos at 0 and keeps loop condition at 1.
+                    Vector3 pos = new Vector3(hexMapArray[xx, 1, zz, 0].transform.position.x, ((yy - 1) * yOffset) + 1, hexMapArray[xx, 1, zz, 0].transform.position.z);
+                    hexPosArray[xx, yy, zz, 0] = Instantiate(placeHolder, pos, Quaternion.identity);
+                    xx++;
+                    //ADD Q 1 TO THIS AREA!!
                 }
-                z++;
+                zz++;
             }
-            y++;
+            yy++;
         }
     }
 
