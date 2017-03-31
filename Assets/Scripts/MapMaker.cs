@@ -6,7 +6,7 @@ public class MapMaker : MonoBehaviour {
 
     public GameObject grassHexPrefab, sandHexPrefab, rockHexPrefab, roadHexPrefab, lavaHexPrefab, snowHexPrefab, swampHexPrefab, dungeonHexPrefab;
     public GameObject waterHalfHexPrefab, iceHalfHexPrefab, lavaHalfHexPrefab, swampHalfHexPrefab, shadowHalfHexPrefab;
-    public GameObject hexToInstantiate, defaultHexPrefab;
+    public GameObject hexToInstantiate, defaultHexPrefab, hexPosHolder;
 
 
     //public TileType[] tilesTypes;
@@ -37,7 +37,7 @@ public class MapMaker : MonoBehaviour {
         hexMapArray = new Hex[xWidth, yTall, zHeight, qStacked];
         hexPosArray = new GameObject[xWidth, yTall, zHeight, qStacked];
 
-        // fill map..
+        // fill map base..
         for (int x = 1; x < xWidth; x++)
         {
             for (int z = 1; z < zHeight; z++)
@@ -59,6 +59,7 @@ public class MapMaker : MonoBehaviour {
             }
         }
 
+        // fill map positions
         int xx = 1;
         int yy = 1;
         int zz = 1;
@@ -72,9 +73,19 @@ public class MapMaker : MonoBehaviour {
                 {
                     // weird y pos calculation due to yy array starting at 1. This starts pos at 0 and keeps loop condition at 1.
                     Vector3 pos = new Vector3(hexMapArray[xx, 1, zz, 0].transform.position.x, ((yy - 1) * yOffset) + 1, hexMapArray[xx, 1, zz, 0].transform.position.z);
-                    hexPosArray[xx, yy, zz, 0] = Instantiate(placeHolder, pos, Quaternion.identity);
+                    hexPosArray[xx, yy, zz, 0] = Instantiate(placeHolder, pos, Quaternion.identity, hexPosHolder.transform);
+                    hexPosArray[xx, yy, zz, 0].gameObject.GetComponent<Hex>().x = xx;
+                    hexPosArray[xx, yy, zz, 0].gameObject.GetComponent<Hex>().y = yy;
+                    hexPosArray[xx, yy, zz, 0].gameObject.GetComponent<Hex>().z = zz;
+                    // q 1
+                    pos = new Vector3(hexMapArray[xx, 1, zz, 0].transform.position.x, (((yy - 1) * yOffset) + halfYOffset) + 1, hexMapArray[xx, 1, zz, 0].transform.position.z);
+                    hexPosArray[xx, yy, zz, 1] = Instantiate(placeHolder, pos, Quaternion.identity, hexPosHolder.transform);
+                    hexPosArray[xx, yy, zz, 1].gameObject.GetComponent<Hex>().x = xx;
+                    hexPosArray[xx, yy, zz, 1].gameObject.GetComponent<Hex>().y = yy;
+                    hexPosArray[xx, yy, zz, 1].gameObject.GetComponent<Hex>().z = zz;
+
+                    // increment
                     xx++;
-                    //ADD Q 1 TO THIS AREA!!
                 }
                 zz++;
             }
@@ -89,6 +100,39 @@ public class MapMaker : MonoBehaviour {
 
         ChangeHexType();
         
+    }
+
+    public void ResetMap()
+    {
+        // kill map
+        int xx = 1;
+        int yy = 1;
+        int zz = 1;
+        while (yy < yTall)
+        {
+            zz = 1;
+            while (zz < zHeight)
+            {
+                xx = 1;
+                while (xx < xWidth)
+                {
+                    // delete
+                    if(hexMapArray[xx, yy, zz, 0] != null)
+                    {
+                        Destroy(hexMapArray[xx, yy, zz, 0].gameObject);
+                    }
+                    // q 1
+                    if (hexMapArray[xx, yy, zz, 1] != null)
+                    {
+                        Destroy(hexMapArray[xx, yy, zz, 1].gameObject);
+                    }
+                    // increment
+                    xx++;
+                }
+                zz++;
+            }
+            yy++;
+        }
     }
 
     void ChangeHexType()

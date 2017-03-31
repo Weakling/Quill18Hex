@@ -84,6 +84,7 @@ public class ReadWriteText : MapMaker {
     {
         StreamReader reader = new StreamReader(@"C:\MapData\Maps.txt");
 
+        mapMaker.ResetMap();
         //string s = reader.ReadLine();
         string s;
         int x = 1;
@@ -97,7 +98,7 @@ public class ReadWriteText : MapMaker {
                 z = 1;
                 while (z < mapMaker.zHeight)
                 {
-                    x = 1;
+                    x =1;
                     while (x < mapMaker.xWidth)
                     {
                         s = reader.ReadLine();
@@ -123,10 +124,16 @@ public class ReadWriteText : MapMaker {
 
     private void MakeTile(string type, int x, int y, int z, int q)
     {
-        if (type == "y")
+        if (type == "t")
         {
-            GameObject newHex = Instantiate(defaultHexPrefab, mapMaker.hexMapArray[x, y, z, q].transform.position, Quaternion.identity);
-            mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
+            // instantiate new hex
+            GameObject newHex = Instantiate(defaultHexPrefab, mapMaker.hexPosArray[x, y, z, 0].transform.position, Quaternion.identity);
+            // set vars
+            newHex.GetComponent<Hex>().x = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
+            newHex.GetComponent<Hex>().y = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().y;
+            newHex.GetComponent<Hex>().z = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
+            // set array
+            mapMaker.hexMapArray[x, y, z, 0] = newHex.GetComponent<Hex>();
         }
         else if (type == "0")
         {
@@ -134,9 +141,18 @@ public class ReadWriteText : MapMaker {
         }
         else if(type == "1")
         {
-            Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z, q].transform.position.x, mapMaker.hexMapArray[x, 1, z, q].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z, q].transform.position.z);
-            GameObject newHex = Instantiate(dungeonHexPrefab, pos, Quaternion.identity);
+            //Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z, q].transform.position.x, mapMaker.hexMapArray[x, 1, z, q].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z, q].transform.position.z);
+            GameObject newHex = Instantiate(dungeonHexPrefab, mapMaker.hexPosArray[x, y, z, q].transform.position, Quaternion.identity);
+            newHex.GetComponent<Hex>().x = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().x;
+            newHex.GetComponent<Hex>().y = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().y;
+            newHex.GetComponent<Hex>().z = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().z;
             mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
         }
+    }
+
+
+    private void EmptyTileHandle()
+    {
+
     }
 }

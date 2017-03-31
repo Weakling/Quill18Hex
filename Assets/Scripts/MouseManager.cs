@@ -277,6 +277,10 @@ public class MouseManager : MonoBehaviour {
                 {
                     // get empty tile component
                     Hex ourEmptyHexScript = mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y - 1, ourHitHexScript.z, 0];
+                    Debug.Log(ourHitHexScript.y - 1);
+                    Debug.Log(ourHitHexScript.x);
+                    Debug.Log(ourHitHexScript.z);
+                    Debug.Log(mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y - 1, ourHitHexScript.z, 0]);
                     GameObject ourEmptyHex = ourEmptyHexScript.gameObject;
                     // set empty hex array
                     ourEmptyHexScript.y++;                                                                                   // set empty hex array info y
