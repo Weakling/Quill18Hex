@@ -127,13 +127,14 @@ public class ReadWriteText : MapMaker {
         if (type == "t")
         {
             // instantiate new hex
-            GameObject newHex = Instantiate(defaultHexPrefab, mapMaker.hexPosArray[x, y, z, 0].transform.position, Quaternion.identity);
+            GameObject newEmptyHex = Instantiate(defaultHexPrefab, mapMaker.hexPosArray[x, y, z, 0].transform.position, Quaternion.identity);
             // set vars
-            newHex.GetComponent<Hex>().x = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
-            newHex.GetComponent<Hex>().y = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().y;
-            newHex.GetComponent<Hex>().z = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
+            newEmptyHex.GetComponent<Hex>().x = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
+            newEmptyHex.GetComponent<Hex>().y = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().y;
+            newEmptyHex.GetComponent<Hex>().z = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
             // set array
-            mapMaker.hexMapArray[x, y, z, 0] = newHex.GetComponent<Hex>();
+            mapMaker.hexMapArray[x, y, z, 0] = newEmptyHex.GetComponent<Hex>();
+            return;
         }
         else if (type == "0")
         {
@@ -141,12 +142,85 @@ public class ReadWriteText : MapMaker {
         }
         else if(type == "1")
         {
-            //Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z, q].transform.position.x, mapMaker.hexMapArray[x, 1, z, q].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z, q].transform.position.z);
-            GameObject newHex = Instantiate(dungeonHexPrefab, mapMaker.hexPosArray[x, y, z, q].transform.position, Quaternion.identity);
-            newHex.GetComponent<Hex>().x = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().x;
-            newHex.GetComponent<Hex>().y = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().y;
-            newHex.GetComponent<Hex>().z = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().z;
-            mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
+            hexToInstantiate = dungeonHexPrefab;
+        }
+        else if (type == "2")
+        {
+            hexToInstantiate = grassHexPrefab;
+        }
+        else if (type == "3")
+        {
+            hexToInstantiate = lavaHexPrefab;
+        }
+        else if (type == "4")
+        {
+            hexToInstantiate = roadHexPrefab;
+        }
+        else if (type == "5")
+        {
+            hexToInstantiate = rockHexPrefab;
+        }
+        else if (type == "6")
+        {
+            hexToInstantiate = sandHexPrefab;
+        }
+        else if (type == "7")
+        {
+            hexToInstantiate = snowHexPrefab;
+        }
+        else if (type == "8")
+        {
+            hexToInstantiate = swampHexPrefab;
+        }
+        else if (type == "p")
+        {
+            hexToInstantiate = iceHalfHexPrefab;
+        }
+        else if (type == "o")
+        {
+            hexToInstantiate = lavaHalfHexPrefab;
+        }
+        else if (type == "i")
+        {
+            hexToInstantiate = shadowHalfHexPrefab;
+        }
+        else if (type == "u")
+        {
+            hexToInstantiate = swampHalfHexPrefab;
+        }
+        else if (type == "y")
+        {
+            hexToInstantiate = waterHalfHexPrefab;
+        }
+        //Vector3 pos = new Vector3(mapMaker.hexMapArray[x, 1, z, q].transform.position.x, mapMaker.hexMapArray[x, 1, z, q].transform.position.y + y * mapMaker.yOffset, mapMaker.hexMapArray[x, 1, z, q].transform.position.z);
+
+        GameObject newHex = Instantiate(hexToInstantiate, mapMaker.hexPosArray[x, y, z, q].transform.position, Quaternion.identity);
+        newHex.GetComponent<Hex>().x = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().x;
+        newHex.GetComponent<Hex>().y = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().y;
+        newHex.GetComponent<Hex>().z = mapMaker.hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().z;
+        mapMaker.hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
+
+        // need to move empty and stuff
+        if(newHex.GetComponent<Hex>().y == 1 && mapMaker.hexMapArray[x, 0, z, 0] == null)
+        {
+            Debug.Log("Got his far");
+            Vector3 pos = new Vector3(mapMaker.hexPosArray[x, y, z, 0].transform.position.x, 1 - mapMaker.yOffset, mapMaker.hexPosArray[x, y, z, 0].transform.position.z);
+            // instantiate new hex
+            newHex = Instantiate(defaultHexPrefab, pos, Quaternion.identity);
+            // set vars
+            newHex.GetComponent<Hex>().x = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
+            newHex.GetComponent<Hex>().y = 0;
+            newHex.GetComponent<Hex>().z = mapMaker.hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
+            newHex.GetComponent<Hex>().q = 0;
+
+            // renderer disable
+            MeshRenderer ourHitMeshRenderer = newHex.GetComponentInChildren<MeshRenderer>();
+            MeshCollider ourHitMeshCollider = newHex.GetComponentInChildren<MeshCollider>();
+            ourHitMeshRenderer.enabled = false;
+            ourHitMeshCollider.enabled = false;
+
+            // set empty array
+            mapMaker.hexMapArray[x, 0, z, 0] = newHex.GetComponent<Hex>();    // set empty hex array
         }
     }
 
