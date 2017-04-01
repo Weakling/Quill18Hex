@@ -114,6 +114,7 @@ public class ReadWriteText : MapMaker {
                 }
                 y++;
             }
+        reader.Close();
 
             //char[] delimiter = { ':' };
             //string[] fields = s.Split(delimiter);
@@ -224,9 +225,4 @@ public class ReadWriteText : MapMaker {
         }
     }
 
-
-    private void EmptyTileHandle()
-    {
-
-    }
 }

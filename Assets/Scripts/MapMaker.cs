@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class MapMaker : MonoBehaviour {
@@ -135,6 +136,208 @@ public class MapMaker : MonoBehaviour {
         }
     }
 
+    // save every map position as its hex type in text file
+    public void SaveToFile()
+    {
+        // declare vars
+        StreamWriter writer = new StreamWriter(@"C:\MapData\Maps.txt");
+        char output = 'n';
+        int y = 1;
+
+        // loop through all dimensions and write hex type in text file
+        while (y < yTall)
+        {
+            #region
+            int z = 1;
+            while (z < zHeight)
+            {
+                int x = 1;
+                while (x < xWidth)
+                {
+                    output = '0';                                   // default output to empty hex
+                    if (hexMapArray[x, y, z, 0] != null)            // check empty array..
+                    {
+                        output = hexMapArray[x, y, z, 0].typeHex;   // set hex type if not empty
+                    }
+                    writer.WriteLine(output);                       // write to q 0
+
+                    output = '0';                                   //default output to empty hex
+                    if (hexMapArray[x, y, z, 1] != null)            // check empty array..
+                    {
+                        output = hexMapArray[x, y, z, 1].typeHex;
+                    }
+                    writer.WriteLine(output);                       // write to q 1
+                    x++;
+                }
+                z++;
+            }
+            y++;
+            #endregion
+        }
+
+        // close writer
+        writer.Close();                                             
+    }
+
+    // read text file and call MakeHex method for every line
+    public void ReadFromFile()
+    {
+        // delete all map hexes
+        ResetMap();
+        
+        // vars
+        StreamReader reader = new StreamReader(@"C:\MapData\Maps.txt");
+        string s;
+        int y = 1;
+
+        // loop through all dimensions and read hex type from text file
+        while (y < yTall)
+        {
+            #region
+            int z = 1;
+            while (z < zHeight)
+            {
+                int x = 1;
+                while (x < xWidth)
+                {
+                    s = reader.ReadLine();      // read line
+                    MakeHex(s, x, y, z, 0);     // make hex from number type
+                    Debug.Log(s);               // debug
+                    s = reader.ReadLine();      // read line
+                    MakeHex(s, x, y, z, 1);     // make hex from number type
+                    Debug.Log(s);               // debug
+
+                    x++;
+                }
+                z++;
+            }
+            y++;
+            #endregion
+        }
+
+        // close reader
+        reader.Close();
+    }
+
+
+    private void MakeHex(string type, int x, int y, int z, int q)
+    {
+        // hex to make is default
+        if (type == "t")
+        {
+            #region
+            // instantiate new hex at position array q 0 (since it's default base hex
+            GameObject newEmptyHex = Instantiate(defaultHexPrefab, hexPosArray[x, y, z, 0].transform.position, Quaternion.identity);
+            
+            // set default hex pos vars from pos array
+            newEmptyHex.GetComponent<Hex>().x = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
+            newEmptyHex.GetComponent<Hex>().y = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().y;
+            newEmptyHex.GetComponent<Hex>().z = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
+           
+            // set default hex in map array
+            hexMapArray[x, y, z, 0] = newEmptyHex.GetComponent<Hex>();
+
+            // stop here
+            return;
+            #endregion
+        }
+
+        // find type of hex if it's not default
+        else if (type == "0")
+        {
+            #region
+            return;
+        }
+        else if (type == "1")
+        {
+            hexToInstantiate = dungeonHexPrefab;
+        }
+        else if (type == "2")
+        {
+            hexToInstantiate = grassHexPrefab;
+        }
+        else if (type == "3")
+        {
+            hexToInstantiate = lavaHexPrefab;
+        }
+        else if (type == "4")
+        {
+            hexToInstantiate = roadHexPrefab;
+        }
+        else if (type == "5")
+        {
+            hexToInstantiate = rockHexPrefab;
+        }
+        else if (type == "6")
+        {
+            hexToInstantiate = sandHexPrefab;
+        }
+        else if (type == "7")
+        {
+            hexToInstantiate = snowHexPrefab;
+        }
+        else if (type == "8")
+        {
+            hexToInstantiate = swampHexPrefab;
+        }
+        else if (type == "p")
+        {
+            hexToInstantiate = iceHalfHexPrefab;
+        }
+        else if (type == "o")
+        {
+            hexToInstantiate = lavaHalfHexPrefab;
+        }
+        else if (type == "i")
+        {
+            hexToInstantiate = shadowHalfHexPrefab;
+        }
+        else if (type == "u")
+        {
+            hexToInstantiate = swampHalfHexPrefab;
+        }
+        else if (type == "y")
+        {
+            hexToInstantiate = waterHalfHexPrefab;
+            #endregion
+        }
+
+        // instantiate new hex at pos array position
+        GameObject newHex = Instantiate(hexToInstantiate, hexPosArray[x, y, z, q].transform.position, Quaternion.identity);
+
+        // get pos vars from pos array
+        newHex.GetComponent<Hex>().x = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().x;
+        newHex.GetComponent<Hex>().y = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().y;
+        newHex.GetComponent<Hex>().z = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().z;
+
+        // set new hex in map array
+        hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
+
+        // new hex is being instantiated at y 1 (need to put in default hex below)
+        if (newHex.GetComponent<Hex>().y == 1 && hexMapArray[x, 0, z, 0] == null)
+        {
+            Debug.Log("Got his far");
+            Vector3 pos = new Vector3(hexPosArray[x, y, z, 0].transform.position.x, 1 - yOffset, hexPosArray[x, y, z, 0].transform.position.z);
+            // instantiate new hex
+            newHex = Instantiate(defaultHexPrefab, pos, Quaternion.identity);
+            // set vars
+            newHex.GetComponent<Hex>().x = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
+            newHex.GetComponent<Hex>().y = 0;
+            newHex.GetComponent<Hex>().z = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
+            newHex.GetComponent<Hex>().q = 0;
+
+            // renderer disable
+            MeshRenderer ourHitMeshRenderer = newHex.GetComponentInChildren<MeshRenderer>();
+            MeshCollider ourHitMeshCollider = newHex.GetComponentInChildren<MeshCollider>();
+            ourHitMeshRenderer.enabled = false;
+            ourHitMeshCollider.enabled = false;
+
+            // set empty array
+            hexMapArray[x, 0, z, 0] = newHex.GetComponent<Hex>();    // set empty hex array
+        }
+    }
+
+    // inputs to change hexToInstantiate type
     void ChangeHexType()
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
