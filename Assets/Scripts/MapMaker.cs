@@ -78,12 +78,14 @@ public class MapMaker : MonoBehaviour {
                     hexPosArray[xx, yy, zz, 0].gameObject.GetComponent<Hex>().x = xx;
                     hexPosArray[xx, yy, zz, 0].gameObject.GetComponent<Hex>().y = yy;
                     hexPosArray[xx, yy, zz, 0].gameObject.GetComponent<Hex>().z = zz;
+                    hexPosArray[xx, yy, zz, 0].gameObject.GetComponent<Hex>().q = 0;
                     // q 1
                     pos = new Vector3(hexMapArray[xx, 1, zz, 0].transform.position.x, (((yy - 1) * yOffset) + halfYOffset) + 1, hexMapArray[xx, 1, zz, 0].transform.position.z);
                     hexPosArray[xx, yy, zz, 1] = Instantiate(placeHolder, pos, Quaternion.identity, hexPosHolder.transform);
                     hexPosArray[xx, yy, zz, 1].gameObject.GetComponent<Hex>().x = xx;
                     hexPosArray[xx, yy, zz, 1].gameObject.GetComponent<Hex>().y = yy;
                     hexPosArray[xx, yy, zz, 1].gameObject.GetComponent<Hex>().z = zz;
+                    hexPosArray[xx, yy, zz, 1].gameObject.GetComponent<Hex>().q = 1;
 
                     // increment
                     xx++;
@@ -136,12 +138,18 @@ public class MapMaker : MonoBehaviour {
         }
     }
 
+    public void SaveButtonClicked()
+    {
+
+    }
+
     // save every map position as its hex type in text file
     public void SaveToFile()
     {
         // declare vars
         StreamWriter writer = new StreamWriter(@"C:\MapData\Maps.txt");
-        char output = 'n';
+        //char output = 'n';
+        string output = "";
         int y = 1;
 
         // loop through all dimensions and write hex type in text file
@@ -154,19 +162,29 @@ public class MapMaker : MonoBehaviour {
                 int x = 1;
                 while (x < xWidth)
                 {
-                    output = '0';                                   // default output to empty hex
+                    //output = '0';                                   // default output to empty hex
                     if (hexMapArray[x, y, z, 0] != null)            // check empty array..
                     {
-                        output = hexMapArray[x, y, z, 0].typeHex;   // set hex type if not empty
+                        output = output + hexMapArray[x, y, z, 0].typeHex;   // set hex type if not empty
                     }
-                    writer.WriteLine(output);                       // write to q 0
+                    else
+                    {
+                        output = output + "0";
+                    }
+                    //Debug.Log(output);
+                    //writer.WriteLine(output);                       // write to q 0
 
-                    output = '0';                                   //default output to empty hex
+                    //output = '0';                                   //default output to empty hex
                     if (hexMapArray[x, y, z, 1] != null)            // check empty array..
                     {
-                        output = hexMapArray[x, y, z, 1].typeHex;
+                        output = output + hexMapArray[x, y, z, 1].typeHex;
                     }
-                    writer.WriteLine(output);                       // write to q 1
+                    else
+                    {
+                        output = output + "0";
+                    }
+                    //Debug.Log(output);
+                    //writer.WriteLine(output);                       // write to q 1
                     x++;
                 }
                 z++;
@@ -174,7 +192,7 @@ public class MapMaker : MonoBehaviour {
             y++;
             #endregion
         }
-
+        writer.WriteLine(output);
         // close writer
         writer.Close();                                             
     }
@@ -190,6 +208,9 @@ public class MapMaker : MonoBehaviour {
         string s;
         int y = 1;
 
+        s = reader.ReadToEnd();
+        //int ctrEnd = (xWidth - 1) * (yTall - 1) * (zHeight - 1) * 2;
+        int ctr = 0;
         // loop through all dimensions and read hex type from text file
         while (y < yTall)
         {
@@ -200,12 +221,16 @@ public class MapMaker : MonoBehaviour {
                 int x = 1;
                 while (x < xWidth)
                 {
-                    s = reader.ReadLine();      // read line
-                    MakeHex(s, x, y, z, 0);     // make hex from number type
-                    Debug.Log(s);               // debug
-                    s = reader.ReadLine();      // read line
-                    MakeHex(s, x, y, z, 1);     // make hex from number type
-                    Debug.Log(s);               // debug
+                    //s = reader.ReadLine();      // read line
+                    MakeHex(s[ctr], x, y, z, 0);     // make hex from number type
+                    Debug.Log(s[ctr]);               // debug
+                    ctr++;
+                    
+                    //s = reader.ReadLine();      // read line
+                    MakeHex(s[ctr], x, y, z, 1);     // make hex from number type
+                    Debug.Log(s[ctr]);               // debug
+                    ctr++;
+                    
 
                     x++;
                 }
@@ -214,16 +239,15 @@ public class MapMaker : MonoBehaviour {
             y++;
             #endregion
         }
-
         // close reader
         reader.Close();
     }
 
 
-    private void MakeHex(string type, int x, int y, int z, int q)
+    private void MakeHex(char type, int x, int y, int z, int q)
     {
         // hex to make is default
-        if (type == "t")
+        if (type == 't')
         {
             #region
             // instantiate new hex at position array q 0 (since it's default base hex
@@ -243,60 +267,60 @@ public class MapMaker : MonoBehaviour {
         }
 
         // find type of hex if it's not default
-        else if (type == "0")
+        else if (type == '0')
         {
             #region
             return;
         }
-        else if (type == "1")
+        else if (type == '1')
         {
             hexToInstantiate = dungeonHexPrefab;
         }
-        else if (type == "2")
+        else if (type == '2')
         {
             hexToInstantiate = grassHexPrefab;
         }
-        else if (type == "3")
+        else if (type == '3')
         {
             hexToInstantiate = lavaHexPrefab;
         }
-        else if (type == "4")
+        else if (type == '4')
         {
             hexToInstantiate = roadHexPrefab;
         }
-        else if (type == "5")
+        else if (type == '5')
         {
             hexToInstantiate = rockHexPrefab;
         }
-        else if (type == "6")
+        else if (type == '6')
         {
             hexToInstantiate = sandHexPrefab;
         }
-        else if (type == "7")
+        else if (type == '7')
         {
             hexToInstantiate = snowHexPrefab;
         }
-        else if (type == "8")
+        else if (type == '8')
         {
             hexToInstantiate = swampHexPrefab;
         }
-        else if (type == "p")
+        else if (type == 'p')
         {
             hexToInstantiate = iceHalfHexPrefab;
         }
-        else if (type == "o")
+        else if (type == 'o')
         {
             hexToInstantiate = lavaHalfHexPrefab;
         }
-        else if (type == "i")
+        else if (type == 'i')
         {
             hexToInstantiate = shadowHalfHexPrefab;
         }
-        else if (type == "u")
+        else if (type == 'u')
         {
             hexToInstantiate = swampHalfHexPrefab;
         }
-        else if (type == "y")
+        else if (type == 'y')
         {
             hexToInstantiate = waterHalfHexPrefab;
             #endregion
@@ -309,32 +333,10 @@ public class MapMaker : MonoBehaviour {
         newHex.GetComponent<Hex>().x = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().x;
         newHex.GetComponent<Hex>().y = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().y;
         newHex.GetComponent<Hex>().z = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().z;
+        newHex.GetComponent<Hex>().q = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().q;
 
         // set new hex in map array
         hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
-
-        // new hex is being instantiated at y 1 (need to put in default hex below)
-        if (newHex.GetComponent<Hex>().y == 1 && hexMapArray[x, 0, z, 0] == null)
-        {
-            Debug.Log("Got his far");
-            Vector3 pos = new Vector3(hexPosArray[x, y, z, 0].transform.position.x, 1 - yOffset, hexPosArray[x, y, z, 0].transform.position.z);
-            // instantiate new hex
-            newHex = Instantiate(defaultHexPrefab, pos, Quaternion.identity);
-            // set vars
-            newHex.GetComponent<Hex>().x = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
-            newHex.GetComponent<Hex>().y = 0;
-            newHex.GetComponent<Hex>().z = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
-            newHex.GetComponent<Hex>().q = 0;
-
-            // renderer disable
-            MeshRenderer ourHitMeshRenderer = newHex.GetComponentInChildren<MeshRenderer>();
-            MeshCollider ourHitMeshCollider = newHex.GetComponentInChildren<MeshCollider>();
-            ourHitMeshRenderer.enabled = false;
-            ourHitMeshCollider.enabled = false;
-
-            // set empty array
-            hexMapArray[x, 0, z, 0] = newHex.GetComponent<Hex>();    // set empty hex array
-        }
     }
 
     // inputs to change hexToInstantiate type

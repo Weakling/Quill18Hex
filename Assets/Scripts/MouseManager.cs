@@ -217,27 +217,15 @@ public class MouseManager : MonoBehaviour {
             }
         }
 
-
-        // empty hex hit..
+        // default hex hit..
         else if (emptyHexClicked == 0)
-        {
-            // renderer disable
-            MeshRenderer ourHitMeshRenderer = ourHitObject.GetComponentInChildren<MeshRenderer>();
-            MeshCollider ourHitMeshCollider = ourHitObject.GetComponentInChildren<MeshCollider>();
-            ourHitMeshRenderer.enabled = false;
-            ourHitMeshCollider.enabled = false;
-
-            // set empty array
-            ourHitHexScript.y--;                                                                                   // set empty hex array info y
-            mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0] = ourHitHexScript;    // set empty hex array
-
-            // empty hex world position
-            ourHitObject.transform.position = new Vector3
-                (ourHitObject.transform.position.x, ourHitObject.transform.position.y - mapMaker.yOffset, ourHitObject.transform.position.z);
+        {            
             // set new hex in array
             mapMaker.hexMapArray[ourNewHexScript.x, ourNewHexScript.y, ourNewHexScript.z, 0] = ourNewHexScript;
-        }
 
+            // delete default hex
+            Destroy(ourHitObject);
+        }
 
         // real hex hit..
         else if (emptyHexClicked == 1)
@@ -253,19 +241,20 @@ public class MouseManager : MonoBehaviour {
 
             Debug.Log(ourNewHexScript.x + "_" + ourNewHexScript.y + "_" + ourNewHexScript.z);
         }
-
     }
 
     void DespawnHex(int emptyHexClicked)
     {
-        // hit object
+        // get hit object
         Hex ourHitHexScript = ourHitObject.GetComponentInParent<Hex>();
+
         // empty hex hit..
         if (emptyHexClicked == 0)
         {
             Debug.Log("empty hit");
             return;
         }
+
         // real hex hit..
         else
         {
@@ -275,35 +264,26 @@ public class MouseManager : MonoBehaviour {
                 if((ourHitHexScript.q == 0 && mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 1] == null) ||
                     (ourHitHexScript.q == 1 && mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0] == null))
                 {
-                    // get empty tile component
-                    Hex ourEmptyHexScript = mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y - 1, ourHitHexScript.z, 0];
-                    Debug.Log(ourHitHexScript.y - 1);
-                    Debug.Log(ourHitHexScript.x);
-                    Debug.Log(ourHitHexScript.z);
-                    Debug.Log(mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y - 1, ourHitHexScript.z, 0]);
-                    GameObject ourEmptyHex = ourEmptyHexScript.gameObject;
+                    // instantiate empty tile
+                    GameObject ourEmptyHex = Instantiate(mapMaker.defaultHexPrefab, 
+                        mapMaker.hexPosArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0].transform.position, Quaternion.identity);
+                    Hex ourEmptyHexScript = ourEmptyHex.GetComponent<Hex>();
+                    
                     // set empty hex array
-                    ourEmptyHexScript.y++;                                                                                   // set empty hex array info y
+                    ourEmptyHexScript.y = 1;                                                                                 // set empty hex array info y
+                    ourEmptyHexScript.x = ourHitHexScript.x;                                                                 // set empty hex array info x
+                    ourEmptyHexScript.z = ourHitHexScript.z;                                                                 // set empty hex array info z
                     mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, 0] = ourEmptyHexScript;    // set empty hex array
-
-                    // set empty hex position
-                    ourEmptyHex.transform.position = new Vector3
-                        (ourEmptyHex.transform.position.x, ourEmptyHex.transform.position.y + mapMaker.yOffset, ourEmptyHex.transform.position.z);
-
-                    // renderer
-                    MeshRenderer ourEmptyMeshRenderer = ourEmptyHexScript.GetComponentInChildren<MeshRenderer>();
-                    MeshCollider ourEmptyMeshCollider = ourEmptyHexScript.GetComponentInChildren<MeshCollider>();
-                    ourEmptyMeshRenderer.enabled = true;
-                    ourEmptyMeshCollider.enabled = true;
                 }
             }
+
             // not last real hex..
             else
             {
+                // remove hit hex from array
                 mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, ourHitHexScript.q] = null;
-                // debug
-                //Debug.Log(mapMaker.hexMapArray[ourHitHexScript.x, ourHitHexScript.y, ourHitHexScript.z, ourHitHexScript.q]);
             }
+            // destroy hit hex
             Destroy(ourHitHexScript.gameObject);
         }
     }
@@ -314,15 +294,4 @@ public class MouseManager : MonoBehaviour {
         Debug.Log(selectedUnit);
     }
 
-    void CheckForArrows()
-    {
-
-    }
-
-    
-
-    /*if (selectedUnit != null)
-            {
-                selectedUnit.destination = ourHitObject.transform.position;
-            }*/
 }
