@@ -9,12 +9,14 @@ public class MapMaker : MonoBehaviour {
     public GameObject waterHalfHexPrefab, iceHalfHexPrefab, lavaHalfHexPrefab, swampHalfHexPrefab, shadowHalfHexPrefab;
     public GameObject hexToInstantiate, defaultHexPrefab, hexPosHolder;
 
+    // variables
+    public bool mapMaking;
 
     //public TileType[] tilesTypes;
     public Hex[,,,] hexMapArray;
     public GameObject[,,,] hexPosArray;
     public GameObject placeHolder;
-
+    List<Hex> listAllHex;
 
     // size of map in terms of number of hex tiles
     public int xWidth;
@@ -34,9 +36,10 @@ public class MapMaker : MonoBehaviour {
         // grab real hex
         hexToInstantiate = grassHexPrefab;
 
-        // instantiate arrays
+        // instantiate arrays and lists
         hexMapArray = new Hex[xWidth, yTall, zHeight, qStacked];
         hexPosArray = new GameObject[xWidth, yTall, zHeight, qStacked];
+        listAllHex = new List<Hex>();
 
         // fill map base..
         for (int x = 1; x < xWidth; x++)
@@ -51,7 +54,7 @@ public class MapMaker : MonoBehaviour {
                 }
                 // hex gameobject info
                 GameObject hex_go = (GameObject)Instantiate(defaultHexPrefab, new Vector3(xPos, 1, z * zOffset), Quaternion.identity); // instantiate
-                hex_go.name = "Hex_" + x + "-" + z;                                                                             // set name to reletive position
+                hex_go.name = "Base Hex_" + x + "-" + z;                                                                        // set name to reletive position
                 hex_go.transform.SetParent(this.transform);                                                                     // set parent for clean up              
                 // hex map info
                 hex_go.GetComponent<Hex>().x = x;
@@ -209,7 +212,6 @@ public class MapMaker : MonoBehaviour {
         int y = 1;
 
         s = reader.ReadToEnd();
-        //int ctrEnd = (xWidth - 1) * (yTall - 1) * (zHeight - 1) * 2;
         int ctr = 0;
         // loop through all dimensions and read hex type from text file
         while (y < yTall)
@@ -221,14 +223,12 @@ public class MapMaker : MonoBehaviour {
                 int x = 1;
                 while (x < xWidth)
                 {
-                    //s = reader.ReadLine();      // read line
                     MakeHex(s[ctr], x, y, z, 0);     // make hex from number type
-                    Debug.Log(s[ctr]);               // debug
+                    //Debug.Log(s[ctr]);               // debug
                     ctr++;
                     
-                    //s = reader.ReadLine();      // read line
                     MakeHex(s[ctr], x, y, z, 1);     // make hex from number type
-                    Debug.Log(s[ctr]);               // debug
+                    //Debug.Log(s[ctr]);               // debug
                     ctr++;
                     
 
@@ -241,26 +241,42 @@ public class MapMaker : MonoBehaviour {
         }
         // close reader
         reader.Close();
+
+        if(!mapMaking)
+        {
+            // get all neighbors in hex list
+            GetAllNeighbors();
+        }
+        
     }
 
+    private void GetAllNeighbors()
+    {
+        foreach(Hex listHex in listAllHex)
+        {
+            listHex.GetNeighbours();
+        }
+    }
 
     private void MakeHex(char type, int x, int y, int z, int q)
     {
         // hex to make is default
         if (type == 't')
         {
-            #region
-            // instantiate new hex at position array q 0 (since it's default base hex
-            GameObject newEmptyHex = Instantiate(defaultHexPrefab, hexPosArray[x, y, z, 0].transform.position, Quaternion.identity);
-            
-            // set default hex pos vars from pos array
-            newEmptyHex.GetComponent<Hex>().x = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
-            newEmptyHex.GetComponent<Hex>().y = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().y;
-            newEmptyHex.GetComponent<Hex>().z = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
-           
-            // set default hex in map array
-            hexMapArray[x, y, z, 0] = newEmptyHex.GetComponent<Hex>();
+            if(mapMaking)
+            {
+                #region
+                // instantiate new hex at position array q 0 (since it's default base hex
+                GameObject newEmptyHex = Instantiate(defaultHexPrefab, hexPosArray[x, y, z, 0].transform.position, Quaternion.identity);
 
+                // set default hex pos vars from pos array
+                newEmptyHex.GetComponent<Hex>().x = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().x;
+                newEmptyHex.GetComponent<Hex>().y = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().y;
+                newEmptyHex.GetComponent<Hex>().z = hexPosArray[x, y, z, 0].gameObject.GetComponent<Hex>().z;
+
+                // set default hex in map array
+                hexMapArray[x, y, z, 0] = newEmptyHex.GetComponent<Hex>();
+            }
             // stop here
             return;
             #endregion
@@ -335,8 +351,18 @@ public class MapMaker : MonoBehaviour {
         newHex.GetComponent<Hex>().z = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().z;
         newHex.GetComponent<Hex>().q = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().q;
 
+        // name new hex
+        newHex.name = "Hex_" + x + "-" + z;
+
         // set new hex in map array
         hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
+
+        // set new hex in hex list
+        if (!mapMaking)
+        {
+            listAllHex.Add(newHex.GetComponent<Hex>());
+        }
+        
     }
 
     // inputs to change hexToInstantiate type

@@ -7,7 +7,7 @@ public class MouseManager : MonoBehaviour {
 
 
     // variables
-    public bool mapMaking;
+    
 
     // our hit object
     private GameObject ourHitObject;
@@ -19,6 +19,7 @@ public class MouseManager : MonoBehaviour {
     // Game objects
     public MapMaker mapMaker;
     public Unit selectedUnit;
+    public MyPathFinder myPathFinder;
 
     // ray cast
     private Ray ray;
@@ -71,7 +72,7 @@ public class MouseManager : MonoBehaviour {
         {
             // MAP MAKING..
             #region
-            if (mapMaking)
+            if (mapMaker.mapMaking)
             {
                 // hit empty hex
                 if (ourHitObject.tag == "Hex Empty")
@@ -87,6 +88,11 @@ public class MouseManager : MonoBehaviour {
                     SpawnHex(2);
                 }
             }
+            // NOT MAPPING
+            else
+            {
+                
+            }
             #endregion
         }
 
@@ -95,7 +101,7 @@ public class MouseManager : MonoBehaviour {
         {
             // MAP MAKING..
             #region
-            if (mapMaking)
+            if (mapMaker.mapMaking)
             {
                 // hit empty hex
                 if (ourHitObject.tag == "Hex Empty")
@@ -111,6 +117,12 @@ public class MouseManager : MonoBehaviour {
                     DespawnHex(2);
                 }
             }
+            // NOT MAPPING
+            else
+            {
+
+            }
+
             #endregion
         }
         // mesh renderer and FPS stuff
