@@ -5,13 +5,19 @@ using UnityEngine;
 public class Hex : MonoBehaviour {
 
     public int x, z, y, q;
+    public int speed;
     public string typeHex;
 
+    // GameObjects
     public GameObject upLeftHex, upRightHex, downLeftHex, downRightHex, leftHex, rightHex;
+    public MapMaker mapMaker;
+    public List<Hex> LNeighbors;
+    
 
     private void Start()
     {
-        
+        mapMaker = FindObjectOfType<MapMaker>().GetComponent<MapMaker>();
+        LNeighbors = new List<Hex>();
     }
 
     public void GetNeighbours()
@@ -50,7 +56,51 @@ public class Hex : MonoBehaviour {
             //rightHex.transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
         }
 
-        //return null;
+        FillNeighborList();
+    }
+
+    public void Pathfind()
+    {
+        print("this far");
+        foreach (Hex neighborHex in LNeighbors)
+        {
+            int ctr = 0;
+            print("Imma pathing" + ctr++);
+            if (speed - 1 > 0 && speed - 1 > neighborHex.speed)
+            {
+                neighborHex.speed = speed - 1;
+                neighborHex.Pathfind();
+            }
+        }
+
+    }
+
+    public void FillNeighborList()
+    {
+        if(leftHex != null)
+        {
+            LNeighbors.Add(leftHex.GetComponent<Hex>());
+        }
+        if (rightHex != null)
+        {
+            LNeighbors.Add(rightHex.GetComponent<Hex>());
+        }
+        if (upLeftHex != null)
+        {
+            LNeighbors.Add(upLeftHex.GetComponent<Hex>());
+        }
+        if (upRightHex != null)
+        {
+            LNeighbors.Add(upRightHex.GetComponent<Hex>());
+        }
+        if (downLeftHex != null)
+        {
+            LNeighbors.Add(downLeftHex.GetComponent<Hex>());
+        }
+        if (downRightHex != null)
+        {
+            LNeighbors.Add(downRightHex.GetComponent<Hex>());
+        }
     }
 
     void GetColors(GameObject moo1, GameObject moo2, GameObject moo3, GameObject moo4)

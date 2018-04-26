@@ -17,6 +17,7 @@ public class MapMaker : MonoBehaviour {
     public GameObject[,,,] hexPosArray;
     public GameObject placeHolder;
     List<Hex> listAllHex;
+    //List<Hex> L
 
     // size of map in terms of number of hex tiles
     public int xWidth;

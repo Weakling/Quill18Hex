@@ -7,7 +7,7 @@ public class MouseManager : MonoBehaviour {
 
 
     // variables
-    
+    public int speed;
 
     // our hit object
     private GameObject ourHitObject;
@@ -91,7 +91,15 @@ public class MouseManager : MonoBehaviour {
             // NOT MAPPING
             else
             {
-                
+                if (ourHitObject.tag == "Hex")
+                {
+                    ourHitObject.GetComponent<Hex>().speed = speed;
+                    ourHitObject.GetComponent<Hex>().Pathfind();
+                }
+                else if (ourHitObject.tag == "Half Hex")
+                {
+                    SpawnHex(2);
+                }
             }
             #endregion
         }
