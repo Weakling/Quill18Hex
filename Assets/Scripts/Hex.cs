@@ -12,9 +12,9 @@ public class Hex : MonoBehaviour {
     public GameObject upLeftHex, upRightHex, downLeftHex, downRightHex, leftHex, rightHex;
     public MapMaker mapMaker;
     public List<Hex> LNeighbors;
-    
 
-    private void Start()
+
+    private void Awake()
     {
         mapMaker = FindObjectOfType<MapMaker>().GetComponent<MapMaker>();
         LNeighbors = new List<Hex>();
@@ -24,6 +24,7 @@ public class Hex : MonoBehaviour {
     {
         // left hex
         leftHex = GameObject.Find("Hex_" + (x - 1) + "-" + z);
+
         // right hex
         rightHex = GameObject.Find("Hex_" + (x + 1) + "-" + z);
 
@@ -64,15 +65,13 @@ public class Hex : MonoBehaviour {
         print("this far");
         foreach (Hex neighborHex in LNeighbors)
         {
-            int ctr = 0;
-            print("Imma pathing" + ctr++);
             if (speed - 1 > 0 && speed - 1 > neighborHex.speed)
             {
+                neighborHex.HighLight();
                 neighborHex.speed = speed - 1;
                 neighborHex.Pathfind();
             }
         }
-
     }
 
     public void FillNeighborList()
@@ -101,6 +100,12 @@ public class Hex : MonoBehaviour {
         {
             LNeighbors.Add(downRightHex.GetComponent<Hex>());
         }
+
+    }
+
+    public void HighLight()
+    {
+        transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
     }
 
     void GetColors(GameObject moo1, GameObject moo2, GameObject moo3, GameObject moo4)
