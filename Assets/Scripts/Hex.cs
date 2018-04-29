@@ -23,6 +23,56 @@ public class Hex : MonoBehaviour {
     public void GetNeighbours()
     {
         // left hex
+        if (x - 1 > 0)
+        {
+            leftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q].gameObject;
+        }
+
+
+        // right hex
+        if (x + 1 <= mapMaker.xWidth)
+        {
+            rightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q].gameObject;
+        }
+    }
+        
+        /*
+        // upper hexes
+        if (z % 2 == 1)
+        {
+            upLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
+            upRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z + 1));
+            downLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
+            downRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z - 1));
+
+            //GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
+        }
+        else
+        {
+            upLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z + 1));
+            upRightHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
+            downLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z - 1));
+            downRightHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
+
+            //GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
+        }
+
+        if (leftHex != null)
+        {
+            //leftHex.transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
+        }
+        if (rightHex != null)
+        {
+            //rightHex.transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
+        }
+
+        FillNeighborList();
+    }*/
+
+    /*
+    public void GetNeighbours()
+    {
+        // left hex
         leftHex = GameObject.Find("Hex_" + (x - 1) + "-" + z);
 
         // right hex
@@ -59,6 +109,7 @@ public class Hex : MonoBehaviour {
 
         FillNeighborList();
     }
+    */
 
     public void Pathfind()
     {
