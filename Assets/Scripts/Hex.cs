@@ -77,7 +77,10 @@ public class Hex : MonoBehaviour {
                 // if clicked hex is at min height, make that hex the left hex
                 if (this.y == 1)
                 {
-                    leftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q].gameObject;
+                    if(mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q] != null)
+                    {
+                        leftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q].gameObject;
+                    }
                 }
                 // else check for lower hexes
                 else
@@ -142,7 +145,10 @@ public class Hex : MonoBehaviour {
                 // if clicked hex is at min height, make that hex the left hex
                 if (this.y == 1)
                 {
-                    rightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q].gameObject;
+                    if(mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q] != null)
+                    {
+                        rightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q].gameObject;
+                    }
                 }
                 // else check for lower hexes
                 else
@@ -162,7 +168,7 @@ public class Hex : MonoBehaviour {
 #endregion
 
 
-        // upper hexes
+        // offset hexes
         if (z % 2 == 1)
         {
             // UPLEFT HEX
@@ -211,7 +217,10 @@ public class Hex : MonoBehaviour {
                     // if clicked hex is at min height, make that hex the left hex
                     if (this.y == 1)
                     {
-                        upLeftHex = mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].gameObject;
+                        if (mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q] != null)
+                        {
+                            upLeftHex = mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].gameObject;
+                        }
                     }
                     // else check for lower hexes
                     else
@@ -230,31 +239,209 @@ public class Hex : MonoBehaviour {
             }
             #endregion
 
-            if (x + 1 < mapMaker.xWidth && z + 1 < mapMaker.zHeight && mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q] != null)
+            // UPRIGHT HEX
+            #region
+            // upright hex space is in array range
+            if (x + 1 < mapMaker.xWidth && z + 1 < mapMaker.zHeight)
             {
-                if (mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q].tag != "Hex Empty")
+                // upright hex exists, check up
+                if (mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q] != null)
                 {
-                    upRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q].gameObject;
+                    // if clicked hex is at max height, make that hex the upright hex
+                    if (this.y == mapMaker.yTall - 1)
+                    {
+                        upRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q].gameObject;
+                    }
+                    // else check for higher hexes
+                    else
+                    {
+                        for (int i = this.y; i <= mapMaker.yTall - 1; i++)
+                        {
+                            // went one too far up, set upright hex one down
+                            if (mapMaker.hexMapArray[this.x + 1, i, this.z + 1, this.q] == null)
+                            {
+                                upRightHex = mapMaker.hexMapArray[this.x + 1, i - 1, this.z + 1, this.q].gameObject;
+                                break;
+                            }
+                            // hit the top, set upright hex as this hex
+                            else if (i == mapMaker.yTall - 1)
+                            {
+                                if (mapMaker.hexMapArray[this.x + 1, i, this.z + 1, this.q] != null)
+                                {
+                                    upRightHex = mapMaker.hexMapArray[this.x + 1, i, this.z + 1, this.q].gameObject;
+                                }
+                                else
+                                {
+                                    upRightHex = mapMaker.hexMapArray[this.x + 1, i - 1, this.z + 1, this.q].gameObject;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                // upright hex null, check down
+                else
+                {
+                    // if clicked hex is at min height, make that hex the upright hex
+                    if (this.y == 1)
+                    {
+                        if(mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q])
+                        {
+                            upRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q].gameObject;
+                        }
+                    }
+                    // else check for lower hexes
+                    else
+                    {
+                        for (int i = this.y; i > 0; i--)
+                        {
+                            // found a real hex
+                            if (mapMaker.hexMapArray[this.x + 1, i, this.z + 1, this.q] != null)
+                            {
+                                upRightHex = mapMaker.hexMapArray[this.x + 1, i, this.z + 1, this.q].gameObject;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+            #endregion
 
-            if (z - 1 > 0 && mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q] != null)
+            // DOWNLEFT HEX
+            #region
+            // downLeftHex hex space is in array range
+            if (z - 1 > 0)
             {
-                if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                // left hex exists, check up
+                if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q] != null)
                 {
-                    downLeftHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                    // if clicked hex is at max height, make that hex the downLeftHex hex
+                    if (this.y == mapMaker.yTall - 1)
+                    {
+                        downLeftHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                    }
+                    // else check for higher hexes
+                    else
+                    {
+                        for (int i = this.y; i <= mapMaker.yTall - 1; i++)
+                        {
+                            // went one too far up, set downLeftHex hex one down
+                            if (mapMaker.hexMapArray[this.x, i, this.z - 1, this.q] == null)
+                            {
+                                downLeftHex = mapMaker.hexMapArray[this.x, i - 1, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                            // hit the top, set left hex as this hex
+                            else if (i == mapMaker.yTall - 1)
+                            {
+                                if (mapMaker.hexMapArray[this.x, i, this.z - 1, this.q] != null)
+                                {
+                                    downLeftHex = mapMaker.hexMapArray[this.x, i, this.z - 1, this.q].gameObject;
+                                }
+                                else
+                                {
+                                    downLeftHex = mapMaker.hexMapArray[this.x, i - 1, this.z - 1, this.q].gameObject;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                // left hex null, check down
+                else
+                {
+                    // if clicked hex is at min height, make that hex the downLeftHex hex
+                    if (this.y == 1)
+                    {
+                        if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q] != null)
+                        {
+                            downLeftHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                        }
+                    }
+                    // else check for lower hexes
+                    else
+                    {
+                        for (int i = this.y; i > 0; i--)
+                        {
+                            // found a real hex
+                            if (mapMaker.hexMapArray[this.x, i, this.z - 1, this.q] != null)
+                            {
+                                downLeftHex = mapMaker.hexMapArray[this.x, i, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+            #endregion
 
-            if (x + 1 < mapMaker.xWidth && z - 1 > 0 && mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q] != null)
+            // DOWNRIGHT HEX
+            #region
+            // downright hex space is in array range
+            if (x + 1 < mapMaker.xWidth && z - 1 > 0)
             {
-                if (mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                // upright hex exists, check up
+                if (mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q] != null)
                 {
-                    downRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q].gameObject;
+                    // if clicked hex is at max height, make that hex the upright hex
+                    if (this.y == mapMaker.yTall - 1)
+                    {
+                        downRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q].gameObject;
+                    }
+                    // else check for higher hexes
+                    else
+                    {
+                        for (int i = this.y; i <= mapMaker.yTall - 1; i++)
+                        {
+                            // went one too far up, set upright hex one down
+                            if (mapMaker.hexMapArray[this.x + 1, i, this.z - 1, this.q] == null)
+                            {
+                                downRightHex = mapMaker.hexMapArray[this.x + 1, i - 1, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                            // hit the top, set upright hex as this hex
+                            else if (i == mapMaker.yTall - 1)
+                            {
+                                if (mapMaker.hexMapArray[this.x + 1, i, this.z - 1, this.q] != null)
+                                {
+                                    downRightHex = mapMaker.hexMapArray[this.x + 1, i, this.z - 1, this.q].gameObject;
+                                }
+                                else
+                                {
+                                    downRightHex = mapMaker.hexMapArray[this.x + 1, i - 1, this.z - 1, this.q].gameObject;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                // upright hex null, check down
+                else
+                {
+                    // if clicked hex is at min height, make that hex the upright hex
+                    if (this.y == 1)
+                    {
+                        if (mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q])
+                        {
+                            downRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q].gameObject;
+                        }
+                    }
+                    // else check for lower hexes
+                    else
+                    {
+                        for (int i = this.y; i > 0; i--)
+                        {
+                            // found a real hex
+                            if (mapMaker.hexMapArray[this.x + 1, i, this.z - 1, this.q] != null)
+                            {
+                                downRightHex = mapMaker.hexMapArray[this.x + 1, i, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-
-            //GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
+#endregion
         }
         else
         {
@@ -304,7 +491,13 @@ public class Hex : MonoBehaviour {
                     // if clicked hex is at min height, make that hex the left hex
                     if (this.y == 1)
                     {
-                        upLeftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z + 1, this.q].gameObject;
+                        if(mapMaker.hexMapArray[this.x - 1, this.y, this.z + 1, this.q])
+                        {
+                            if(mapMaker.hexMapArray[this.x - 1, this.y, this.z + 1, this.q] != null)
+                            {
+                                upLeftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z + 1, this.q].gameObject;
+                            }
+                        }
                     }
                     // else check for lower hexes
                     else
@@ -323,29 +516,209 @@ public class Hex : MonoBehaviour {
             }
             #endregion
 
-            if (z + 1 < mapMaker.zHeight && mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q] != null)
+            // UPRIGHT HEX
+            #region
+            // upright hex space is in array range
+            if (z + 1 < mapMaker.zHeight)
             {
-                if (mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].tag != "Hex Empty")
+                // upright hex exists, check up
+                if (mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q] != null)
                 {
-                    upRightHex = mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].gameObject;
+                    // if clicked hex is at max height, make that hex the upright hex
+                    if (this.y == mapMaker.yTall - 1)
+                    {
+                        upRightHex = mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].gameObject;
+                    }
+                    // else check for higher hexes
+                    else
+                    {
+                        for (int i = this.y; i <= mapMaker.yTall - 1; i++)
+                        {
+                            // went one too far up, set upright hex one down
+                            if (mapMaker.hexMapArray[this.x, i, this.z + 1, this.q] == null)
+                            {
+                                upRightHex = mapMaker.hexMapArray[this.x, i - 1, this.z + 1, this.q].gameObject;
+                                break;
+                            }
+                            // hit the top, set upright hex as this hex
+                            else if (i == mapMaker.yTall - 1)
+                            {
+                                if (mapMaker.hexMapArray[this.x, i, this.z + 1, this.q] != null)
+                                {
+                                    upRightHex = mapMaker.hexMapArray[this.x, i, this.z + 1, this.q].gameObject;
+                                }
+                                else
+                                {
+                                    upRightHex = mapMaker.hexMapArray[this.x, i - 1, this.z + 1, this.q].gameObject;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                // upright hex null, check down
+                else
+                {
+                    // if clicked hex is at min height, make that hex the upright hex
+                    if (this.y == 1)
+                    {
+                        if(mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q])
+                        {
+                            upRightHex = mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].gameObject;
+                        }
+                    }
+                    // else check for lower hexes
+                    else
+                    {
+                        for (int i = this.y; i > 0; i--)
+                        {
+                            // found a real hex
+                            if (mapMaker.hexMapArray[this.x, i, this.z + 1, this.q] != null)
+                            {
+                                upRightHex = mapMaker.hexMapArray[this.x, i, this.z + 1, this.q].gameObject;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+            #endregion
 
-            if (x - 1 > 0 && z - 1 > 0 && mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q] != null)
+            // DOWNLEFT HEX
+            #region
+            // downLeftHex hex space is in array range
+            if (x - 1 > 0 && z - 1 > 0)
             {
-                if (mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                // downLeftHex hex exists, check up
+                if (mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q] != null)
                 {
-                    downLeftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q].gameObject;
+                    // if clicked hex is at max height, make that hex the downLeftHex hex
+                    if (this.y == mapMaker.yTall - 1)
+                    {
+                        downLeftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q].gameObject;
+                    }
+                    // else check for higher hexes
+                    else
+                    {
+                        for (int i = this.y; i <= mapMaker.yTall - 1; i++)
+                        {
+                            // went one too far up, set downLeftHex hex one down
+                            if (mapMaker.hexMapArray[this.x - 1, i, this.z - 1, this.q] == null)
+                            {
+                                downLeftHex = mapMaker.hexMapArray[this.x - 1, i - 1, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                            // hit the top, set left hex as this hex
+                            else if (i == mapMaker.yTall - 1)
+                            {
+                                if (mapMaker.hexMapArray[this.x - 1, i, this.z - 1, this.q] != null)
+                                {
+                                    downLeftHex = mapMaker.hexMapArray[this.x - 1, i, this.z - 1, this.q].gameObject;
+                                }
+                                else
+                                {
+                                    downLeftHex = mapMaker.hexMapArray[this.x - 1, i - 1, this.z - 1, this.q].gameObject;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                // left hex null, check down
+                else
+                {
+                    // if clicked hex is at min height, make that hex the downLeftHex hex
+                    if (this.y == 1)
+                    {
+                        if (mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q] != null)
+                        {
+                            downLeftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q].gameObject;
+                        }
+                    }
+                    // else check for lower hexes
+                    else
+                    {
+                        for (int i = this.y; i > 0; i--)
+                        {
+                            // found a real hex
+                            if (mapMaker.hexMapArray[this.x - 1, i, this.z - 1, this.q] != null)
+                            {
+                                downLeftHex = mapMaker.hexMapArray[this.x - 1, i, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+            #endregion
 
-            if (z - 1 > 0 && mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q] != null)
+            //DOWNRIGHT HEX
+            #region
+            // downright hex space is in array range
+            if (z - 1 > 0)
             {
-                if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                // upright hex exists, check up
+                if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q] != null)
                 {
-                    downRightHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                    // if clicked hex is at max height, make that hex the upright hex
+                    if (this.y == mapMaker.yTall - 1)
+                    {
+                        downRightHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                    }
+                    // else check for higher hexes
+                    else
+                    {
+                        for (int i = this.y; i <= mapMaker.yTall - 1; i++)
+                        {
+                            // went one too far up, set upright hex one down
+                            if (mapMaker.hexMapArray[this.x, i, this.z - 1, this.q] == null)
+                            {
+                                downRightHex = mapMaker.hexMapArray[this.x, i - 1, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                            // hit the top, set upright hex as this hex
+                            else if (i == mapMaker.yTall - 1)
+                            {
+                                if (mapMaker.hexMapArray[this.x, i, this.z - 1, this.q] != null)
+                                {
+                                    downRightHex = mapMaker.hexMapArray[this.x, i, this.z - 1, this.q].gameObject;
+                                }
+                                else
+                                {
+                                    downRightHex = mapMaker.hexMapArray[this.x, i - 1, this.z - 1, this.q].gameObject;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                // upright hex null, check down
+                else
+                {
+                    // if clicked hex is at min height, make that hex the upright hex
+                    if (this.y == 1)
+                    {
+                        if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q])
+                        {
+                            downRightHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                        }
+                    }
+                    // else check for lower hexes
+                    else
+                    {
+                        for (int i = this.y; i > 0; i--)
+                        {
+                            // found a real hex
+                            if (mapMaker.hexMapArray[this.x, i, this.z - 1, this.q] != null)
+                            {
+                                downRightHex = mapMaker.hexMapArray[this.x, i, this.z - 1, this.q].gameObject;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+#endregion
         }
 
         FillNeighborList();
