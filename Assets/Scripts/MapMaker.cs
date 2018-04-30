@@ -353,7 +353,7 @@ public class MapMaker : MonoBehaviour {
         newHex.GetComponent<Hex>().q = hexPosArray[x, y, z, q].gameObject.GetComponent<Hex>().q;
 
         // name new hex
-        newHex.name = "Hex_" + x + "-" + z;
+        newHex.name = "Hex_" + x + "-" + z + "-" + y;
 
         // set new hex in map array
         hexMapArray[x, y, z, q] = newHex.GetComponent<Hex>();
