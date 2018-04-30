@@ -5,19 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    MapMaker mapMaker;
+
+
+    private void Awake()
     {
+        mapMaker = FindObjectOfType<MapMaker>();
+    }
 
-	}
 
 
 
+    public void BTNMapping()
+    {
+        mapMaker.mapMaking = !mapMaker.mapMaking;
+    }
     public void GOMainMenu()
     {
         SceneManager.LoadScene(0);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hex : MonoBehaviour {
 
-    public int x, z, y, q;
+    public int x, z, y, q, yCtr;
     public int speed;
     public string typeHex;
 
@@ -23,93 +23,113 @@ public class Hex : MonoBehaviour {
     public void GetNeighbours()
     {
         // left hex
-        if (x - 1 > 0)
+        if (x - 1 > 0 && mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q] != null)
         {
-            leftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q].gameObject;
+            if (mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q].tag != "Hex Empty")
+            {
+                if(this.y == mapMaker.yTall - 1)
+                {
+                    leftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z, this.q].gameObject;
+                }
+                else
+                {
+                    for (int i = this.y; i <= mapMaker.yTall - 1; i++)
+                    {
+                        if (mapMaker.hexMapArray[this.x - 1, i, this.z, this.q] == null)
+                        {
+                            leftHex = mapMaker.hexMapArray[this.x - 1, i - 1, this.z, this.q].gameObject;
+                            break;
+                        }
+                    }
+                    // make out of bounds here
+                }
+                
+            }
         }
-
 
         // right hex
-        if (x + 1 <= mapMaker.xWidth)
+        if (x + 1 < mapMaker.xWidth && mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q] != null)
         {
-            rightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q].gameObject;
+            if (mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q].tag != "Hex Empty")
+            {
+                rightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z, this.q].gameObject;
+            }
         }
-    }
-        
-        /*
+    
         // upper hexes
         if (z % 2 == 1)
         {
-            upLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
-            upRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z + 1));
-            downLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
-            downRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z - 1));
+            if(z + 1 < mapMaker.zHeight && mapMaker.hexMapArray[this.x , this.y, this.z + 1, this.q] != null)
+            {
+                if(mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].tag != "Hex Empty")
+                {
+                    upLeftHex = mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].gameObject;
+                }
+            }
+
+            if (x + 1 < mapMaker.xWidth && z + 1 < mapMaker.zHeight && mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q] != null)
+            {
+                if (mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q].tag != "Hex Empty")
+                {
+                    upRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z + 1, this.q].gameObject;
+                }
+            }
+
+            if (z - 1 > 0 && mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q] != null)
+            {
+                if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                {
+                    downLeftHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                }
+            }
+
+            if (x + 1 < mapMaker.xWidth && z - 1 > 0 && mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q] != null)
+            {
+                if (mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                {
+                    downRightHex = mapMaker.hexMapArray[this.x + 1, this.y, this.z - 1, this.q].gameObject;
+                }
+            }
 
             //GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
         }
         else
         {
-            upLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z + 1));
-            upRightHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
-            downLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z - 1));
-            downRightHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
+            if (x - 1 > 0 && z + 1 < mapMaker.zHeight && mapMaker.hexMapArray[this.x - 1, this.y, this.z + 1, this.q] != null)
+            {
+                if (mapMaker.hexMapArray[this.x - 1, this.y, this.z + 1, this.q].tag != "Hex Empty")
+                {
+                    upLeftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z + 1, this.q].gameObject;
+                }
+            }
 
-            //GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
-        }
+            if (z + 1 < mapMaker.zHeight && mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q] != null)
+            {
+                if (mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].tag != "Hex Empty")
+                {
+                    upRightHex = mapMaker.hexMapArray[this.x, this.y, this.z + 1, this.q].gameObject;
+                }
+            }
 
-        if (leftHex != null)
-        {
-            //leftHex.transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
-        }
-        if (rightHex != null)
-        {
-            //rightHex.transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
-        }
+            if (x - 1 > 0 && z - 1 > 0 && mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q] != null)
+            {
+                if (mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                {
+                    downLeftHex = mapMaker.hexMapArray[this.x - 1, this.y, this.z - 1, this.q].gameObject;
+                }
+            }
 
-        FillNeighborList();
-    }*/
-
-    /*
-    public void GetNeighbours()
-    {
-        // left hex
-        leftHex = GameObject.Find("Hex_" + (x - 1) + "-" + z);
-
-        // right hex
-        rightHex = GameObject.Find("Hex_" + (x + 1) + "-" + z);
-
-        // upper hexes
-        if(z % 2 == 1)
-        {
-            upLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
-            upRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z + 1));
-            downLeftHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
-            downRightHex = GameObject.Find("Hex_" + (x + 1) + "-" + (z - 1));
-
-            //GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
-        }
-        else
-        {
-            upLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z + 1));
-            upRightHex = GameObject.Find("Hex_" + (x) + "-" + (z + 1));
-            downLeftHex = GameObject.Find("Hex_" + (x - 1) + "-" + (z - 1));
-            downRightHex = GameObject.Find("Hex_" + (x) + "-" + (z - 1));
-
-            //GetColors(upLeftHex, upRightHex, downLeftHex, downRightHex);
-        }
-
-        if(leftHex != null)
-        {
-            //leftHex.transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
-        }
-        if(rightHex != null)
-        {
-            //rightHex.transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
+            if (z - 1 > 0 && mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q] != null)
+            {
+                if (mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].tag != "Hex Empty")
+                {
+                    downRightHex = mapMaker.hexMapArray[this.x, this.y, this.z - 1, this.q].gameObject;
+                }
+            }
         }
 
         FillNeighborList();
     }
-    */
 
     public void Pathfind()
     {
