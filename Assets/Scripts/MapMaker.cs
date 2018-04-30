@@ -112,26 +112,28 @@ public class MapMaker : MonoBehaviour {
     public void ResetMap()
     {
         // kill map
-        int xx = 1;
-        int yy = 1;
-        int zz = 1;
+        int xx = 0;
+        int yy = 0;
+        int zz = 0;
         while (yy < yTall)
         {
-            zz = 1;
+            zz = 0;
             while (zz < zHeight)
             {
-                xx = 1;
+                xx = 0;
                 while (xx < xWidth)
                 {
                     // delete
                     if(hexMapArray[xx, yy, zz, 0] != null)
                     {
                         Destroy(hexMapArray[xx, yy, zz, 0].gameObject);
+                        hexMapArray[xx, yy, zz, 0] = null;
                     }
                     // q 1
                     if (hexMapArray[xx, yy, zz, 1] != null)
                     {
                         Destroy(hexMapArray[xx, yy, zz, 1].gameObject);
+                        hexMapArray[xx, yy, zz, 1] = null;
                     }
                     // increment
                     xx++;
