@@ -726,13 +726,27 @@ public class Hex : MonoBehaviour {
 
     public void Pathfind()
     {
-        print("this far");
+        foreach(Hex neighborHex in LNeighbors)
+        {
+            neighborHex.DefaultColor();
+            neighborHex.speed = 0;
+        }
+
         foreach (Hex neighborHex in LNeighbors)
         {
-            if (speed - 1 > 0 && speed - 1 > neighborHex.speed)
+            int cost = 0;
+            if(neighborHex.y < this.y)
+            {
+                cost = 1;
+            }
+            else
+            {
+                cost = neighborHex.y - this.y + 1;
+            }
+            if (speed - cost > 0 && speed - cost > neighborHex.speed)
             {
                 neighborHex.HighLight();
-                neighborHex.speed = speed - 1;
+                neighborHex.speed = speed - cost;
                 neighborHex.Pathfind();
             }
         }
@@ -770,6 +784,11 @@ public class Hex : MonoBehaviour {
     public void HighLight()
     {
         transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
+    }
+
+    public void DefaultColor()
+    {
+        transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.gray;
     }
 
     void GetColors(GameObject moo1, GameObject moo2, GameObject moo3, GameObject moo4)
