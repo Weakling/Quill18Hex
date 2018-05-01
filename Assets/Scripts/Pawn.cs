@@ -4,13 +4,44 @@ using UnityEngine;
 
 public class Pawn : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+
+    // stats
+    public int speed;
+
+
+    // abilities
+    public bool flying;
+
+
+    // state
+    public bool isPlaced;
+
+
+    // movement
+    public float adjustmentHeight = 0.146f;
+    public Hex hexCurrent;
+
+    // scripts
+    public Hex hex;
+    public MapMaker mapMaker;
+    public MouseManager mouseManager;
+
+
+
+    private void Awake()
+    {
+        mapMaker = FindObjectOfType<MapMaker>();
+    }
+
+
+    void Start ()
+    {
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	
+	void Update ()
+    {
 		
 	}
 }

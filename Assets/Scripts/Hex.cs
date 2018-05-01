@@ -8,6 +8,10 @@ public class Hex : MonoBehaviour {
     public int speed;
     public string typeHex;
 
+    // pawns
+    public Pawn pawnPresent;
+
+
     // GameObjects
     public GameObject upLeftHex, upRightHex, downLeftHex, downRightHex, leftHex, rightHex;
     public MapMaker mapMaker;
@@ -20,6 +24,7 @@ public class Hex : MonoBehaviour {
         LNeighbors = new List<Hex>();
     }
 
+    // get neighbors
     public void GetNeighbours()
     {
         // check if I am a buried hex
@@ -724,14 +729,18 @@ public class Hex : MonoBehaviour {
         FillNeighborList();
     }
 
-    public void Pathfind()
+    public void ClearPathfind()
     {
         foreach(Hex neighborHex in LNeighbors)
         {
             neighborHex.DefaultColor();
             neighborHex.speed = 0;
         }
+    }
 
+    public void Pathfind(int PawnSpeed)
+    {
+        this.speed = PawnSpeed;
         foreach (Hex neighborHex in LNeighbors)
         {
             int cost = 0;
@@ -747,7 +756,7 @@ public class Hex : MonoBehaviour {
             {
                 neighborHex.HighLight();
                 neighborHex.speed = speed - cost;
-                neighborHex.Pathfind();
+                neighborHex.Pathfind(neighborHex.speed);
             }
         }
     }

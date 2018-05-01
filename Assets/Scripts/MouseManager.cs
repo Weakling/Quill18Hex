@@ -6,9 +6,6 @@ using UnityEngine.EventSystems;
 public class MouseManager : MonoBehaviour {
 
 
-    // variables
-    public int speed;
-
     // our hit object
     private GameObject ourHitObject;
 
@@ -17,6 +14,10 @@ public class MouseManager : MonoBehaviour {
     // new hex
 
     // Game objects
+    public Pawn pawnCurrent;
+    public Pawn pawnToPlace;
+    public Hex hexCurrent;
+
     public MapMaker mapMaker;
     public Unit selectedUnit;
     public MyPathFinder myPathFinder;
@@ -50,10 +51,15 @@ public class MouseManager : MonoBehaviour {
             #region
             // get hit object collider
             ourHitObject = hitInfo.collider.transform.parent.gameObject;
+            //print(ourHitObject = hitInfo.collider.transform.parent.gameObject);
 
             // over a hex..
             if (ourHitObject.transform.GetComponent<Hex>() != null)
             { 
+                MouseClickHex(ourHitObject);
+            }
+            else if(ourHitObject.transform.GetComponent<Pawn>() != null)
+            {
                 MouseClickHex(ourHitObject);
             }
             // over a unit..
@@ -88,13 +94,61 @@ public class MouseManager : MonoBehaviour {
                     SpawnHex(2);
                 }
             }
+            
             // NOT MAPPING
             else
             {
+                // clicked pawn
+                if(ourHitObject.tag == "Pawn")
+                {
+                    // get pawn
+                    pawnCurrent = ourHitObject.GetComponent<Pawn>();
+                    
+                    // pawn not placed
+                    if(!pawnCurrent.isPlaced)
+                    {
+                        pawnToPlace = pawnCurrent;
+                    }
+                    else
+                    {
+                        SelectPawn(pawnCurrent.hexCurrent, pawnCurrent);
+                    }
+                }
+
+                // clicked HEX
                 if (ourHitObject.tag == "Hex")
                 {
-                    ourHitObject.GetComponent<Hex>().speed = speed;
-                    ourHitObject.GetComponent<Hex>().Pathfind();
+                    // get hex
+                    hexCurrent = ourHitObject.GetComponent<Hex>();
+                    
+                    // placing pawn
+                    if (pawnToPlace != null)
+                    {
+                        // set position to selected hex
+                        pawnToPlace.transform.position = new Vector3(ourHitObject.transform.position.x, 
+                            ourHitObject.transform.position.y + pawnToPlace.adjustmentHeight, 
+                            ourHitObject.transform.position.z);
+
+                        // set pawn to hex
+                        ourHitObject.GetComponent<Hex>().pawnPresent = pawnToPlace;
+                        // set hex to pawn
+                        pawnToPlace.hexCurrent = ourHitObject.GetComponent<Hex>();
+                        
+                        // pawn is placed
+                        pawnToPlace.isPlaced = true;
+                        pawnToPlace = null;
+                    }
+                    
+                    // selecting pawn hex
+                    else if(hexCurrent.pawnPresent != null)
+                    {
+                        SelectPawn(hexCurrent, hexCurrent.pawnPresent);
+                    }
+                    else
+                    {
+                        //ourHitObject.GetComponent<Hex>().speed = speed;
+                        //ourHitObject.GetComponent<Hex>().Pathfind();
+                    }
                 }
                 else if (ourHitObject.tag == "Half Hex")
                 {
@@ -144,6 +198,14 @@ public class MouseManager : MonoBehaviour {
 
         //Ray fpsRay = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         #endregion
+    }
+
+    void SelectPawn(Hex Hex, Pawn Pawn)
+    {
+        print("moo");
+        print(Hex);
+        Hex.ClearPathfind();
+        Hex.Pathfind(Pawn.speed);
     }
 
     void SpawnHex(int emptyHexClicked)
