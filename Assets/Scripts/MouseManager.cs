@@ -221,9 +221,9 @@ public class MouseManager : MonoBehaviour {
         {
             // select pawn
             pawnCurrent = Pawn;
-
+            
             Hex.ClearPathfind();
-            Hex.PathfindMovement(pawnCurrent.speed + 1);
+            Hex.PathfindMovement(pawnCurrent.speedLeft + 1);
             Hex.PathfindAdjacentMovement();
         }
     }
@@ -236,18 +236,30 @@ public class MouseManager : MonoBehaviour {
 
     void MovePawn(Hex DestinationHex)
     {
+        int cost;
         // clear movement hex grid
-        print(pawnCurrent.hexCurrent);
+        cost = DestinationHex.y - pawnCurrent.hexCurrent.y + 1;
+        if(cost <= 0)
+        {
+            cost = 1;
+        }
+        pawnCurrent.speedLeft -= cost;
         pawnCurrent.hexCurrent.ClearPathfind();
+        pawnCurrent.hexCurrent.speed = 0;
+        pawnCurrent.hexCurrent.pawnPresent = null;
+
         // set pawn position
-        /*pawnCurrent.transform.position = new Vector3(DestinationHex.transform.position.x,
+        pawnCurrent.transform.position = new Vector3(DestinationHex.transform.position.x,
             DestinationHex.transform.position.y + pawnCurrent.adjustmentHeight,
             DestinationHex.transform.position.z);
-        DestinationHex.PathfindMovement(pawnCurrent.speed + 1);
-        DestinationHex.PathfindAdjacentMovement();
 
+        // current pawn and hex set to each other
         pawnCurrent.hexCurrent = DestinationHex;
-        DestinationHex.pawnPresent = pawnCurrent;*/
+        DestinationHex.pawnPresent = pawnCurrent;
+
+        // new pathfind hex grid
+        DestinationHex.PathfindMovement(pawnCurrent.speedLeft + 1);
+        DestinationHex.PathfindAdjacentMovement();
     }
 
     void SpawnHex(int emptyHexClicked)

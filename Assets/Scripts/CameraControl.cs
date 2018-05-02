@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraControl : MonoBehaviour {
 
     private float currentRotationX, currentRotationY;
-    private float rotationSpeed;
+    public float rotationSpeedVertical, rotationSpeedHorizontal;
     public float moveSpeed;
     private float moveVelocityX, moveVelocityZ;
     public Transform leftTarget, rightTarget, forwardTarget, backwardTarget, downTarget, upTarget, myCamera;
@@ -15,16 +15,17 @@ public class CameraControl : MonoBehaviour {
     void Start ()
     {
         myCamera = transform.GetChild(0);
-        leftTarget = transform.GetChild(1);
-        rightTarget = transform.GetChild(2);
-        forwardTarget = transform.GetChild(3);
-        backwardTarget = transform.GetChild(4);
-        downTarget = transform.GetChild(5);
-        upTarget = transform.GetChild(6);
+        //leftTarget = transform.GetChild(1);
+        //rightTarget = transform.GetChild(2);
+        //forwardTarget = transform.GetChild(3);
+        //backwardTarget = transform.GetChild(4);
+        //downTarget = transform.GetChild(5);
+        //upTarget = transform.GetChild(6);
 
         currentRotationX = 14;
         currentRotationY = 0;
-        rotationSpeed = .75f;
+        rotationSpeedHorizontal = 1.1f;
+        rotationSpeedVertical = .90f;
 	}
 	
 	void Update ()
@@ -40,27 +41,28 @@ public class CameraControl : MonoBehaviour {
     void CameraMove()
     {
         // rotate left..
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) || (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.LeftShift)))
         {
-            currentRotationY = currentRotationY - rotationSpeed;
+            currentRotationY = currentRotationY - rotationSpeedHorizontal;
             myCamera.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
         }
+
         // rotate up..
-        else if (Input.GetKey(KeyCode.UpArrow))
+        else if (Input.GetKey(KeyCode.DownArrow) || (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.LeftShift)))
         {
-            currentRotationX = currentRotationX + rotationSpeed;
+            currentRotationX = currentRotationX + rotationSpeedVertical;
             myCamera.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
         }
         // rotate right..
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow) || (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.LeftShift)))
         {
-            currentRotationY = currentRotationY + rotationSpeed;
+            currentRotationY = currentRotationY + rotationSpeedHorizontal;
             myCamera.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
         }
         // rotate down..
-        else if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.UpArrow) || (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.LeftShift)))
         {
-            currentRotationX = currentRotationX - rotationSpeed;
+            currentRotationX = currentRotationX - rotationSpeedVertical;
             myCamera.transform.eulerAngles = new Vector3(currentRotationX, currentRotationY);
         }
 

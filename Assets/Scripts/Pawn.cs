@@ -6,7 +6,8 @@ public class Pawn : MonoBehaviour {
 
 
     // stats
-    public int speed;
+    public int speedMax;
+    public int speedLeft;
 
 
     // abilities
@@ -36,7 +37,7 @@ public class Pawn : MonoBehaviour {
 
     void Start ()
     {
-		
+        speedLeft = speedMax;
 	}
 	
 	
