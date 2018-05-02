@@ -15,7 +15,7 @@ public class Pawn : MonoBehaviour {
 
     // state
     public bool isPlaced;
-
+    public int team;
 
     // movement
     public float adjustmentHeight = 0.146f;

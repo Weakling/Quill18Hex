@@ -17,7 +17,8 @@ public class MapMaker : MonoBehaviour {
     public GameObject[,,,] hexPosArray;
     public GameObject placeHolder;
     List<Hex> listAllHex;
-    //List<Hex> L
+    public List<Hex> listHexField;
+
 
     // size of map in terms of number of hex tiles
     public int xWidth;
@@ -31,6 +32,11 @@ public class MapMaker : MonoBehaviour {
     float zOffset = 0.865f;
     public float yOffset = 0.133f;
     public float halfYOffset = 0.0667f;
+
+    private void Awake()
+    {
+        listHexField = new List<Hex>();
+    }
 
     void Start ()
     {

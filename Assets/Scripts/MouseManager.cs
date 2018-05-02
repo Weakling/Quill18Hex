@@ -15,6 +15,7 @@ public class MouseManager : MonoBehaviour {
 
     // Game objects
     public Pawn pawnCurrent;
+    public Pawn pawnClicked;
     public Pawn pawnToPlace;
     public Hex hexCurrent;
 
@@ -102,25 +103,36 @@ public class MouseManager : MonoBehaviour {
                 if(ourHitObject.tag == "Pawn")
                 {
                     // get pawn
-                    pawnCurrent = ourHitObject.GetComponent<Pawn>();
+                    pawnClicked = ourHitObject.GetComponent<Pawn>();
                     
                     // pawn not placed
-                    if(!pawnCurrent.isPlaced)
+                    if(!pawnClicked.isPlaced)
                     {
-                        pawnToPlace = pawnCurrent;
+                        pawnToPlace = pawnClicked;
                     }
                     else
                     {
-                        SelectPawn(pawnCurrent.hexCurrent, pawnCurrent);
+                        ClickPawn(pawnClicked.hexCurrent, pawnClicked);
                     }
                 }
 
                 // clicked HEX
-                if (ourHitObject.tag == "Hex")
+                else if (ourHitObject.tag == "Hex")
                 {
                     // get hex
                     hexCurrent = ourHitObject.GetComponent<Hex>();
-                    
+
+                    // movement hex clicked
+                    if (hexCurrent.adjacentMove)
+                    {
+                        MovePawn(hexCurrent);
+                    }
+                    // selecting pawn hex
+                    else if (hexCurrent.pawnPresent != null)
+                    {
+                        ClickPawn(hexCurrent, hexCurrent.pawnPresent);
+                    }
+
                     // placing pawn
                     if (pawnToPlace != null)
                     {
@@ -139,11 +151,7 @@ public class MouseManager : MonoBehaviour {
                         pawnToPlace = null;
                     }
                     
-                    // selecting pawn hex
-                    else if(hexCurrent.pawnPresent != null)
-                    {
-                        SelectPawn(hexCurrent, hexCurrent.pawnPresent);
-                    }
+                    
                     else
                     {
                         //ourHitObject.GetComponent<Hex>().speed = speed;
@@ -200,12 +208,46 @@ public class MouseManager : MonoBehaviour {
         #endregion
     }
 
-    void SelectPawn(Hex Hex, Pawn Pawn)
+
+    void ClickPawn(Hex Hex, Pawn Pawn)
     {
-        print("moo");
-        print(Hex);
+        // pawn is selected already
+        if(pawnCurrent == Pawn)
+        {
+            DeselectPawn(Hex, pawnCurrent);
+        }
+        // pawn is NOT selected
+        else
+        {
+            // select pawn
+            pawnCurrent = Pawn;
+
+            Hex.ClearPathfind();
+            Hex.PathfindMovement(pawnCurrent.speed + 1);
+            Hex.PathfindAdjacentMovement();
+        }
+    }
+
+    void DeselectPawn(Hex Hex, Pawn Pawn)
+    {
         Hex.ClearPathfind();
-        Hex.Pathfind(Pawn.speed);
+        pawnCurrent = null;
+    }
+
+    void MovePawn(Hex DestinationHex)
+    {
+        // clear movement hex grid
+        print(pawnCurrent.hexCurrent);
+        pawnCurrent.hexCurrent.ClearPathfind();
+        // set pawn position
+        /*pawnCurrent.transform.position = new Vector3(DestinationHex.transform.position.x,
+            DestinationHex.transform.position.y + pawnCurrent.adjustmentHeight,
+            DestinationHex.transform.position.z);
+        DestinationHex.PathfindMovement(pawnCurrent.speed + 1);
+        DestinationHex.PathfindAdjacentMovement();
+
+        pawnCurrent.hexCurrent = DestinationHex;
+        DestinationHex.pawnPresent = pawnCurrent;*/
     }
 
     void SpawnHex(int emptyHexClicked)

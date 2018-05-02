@@ -8,6 +8,8 @@ public class Hex : MonoBehaviour {
     public int speed;
     public string typeHex;
 
+    public bool adjacentMove;
+
     // pawns
     public Pawn pawnPresent;
 
@@ -173,7 +175,7 @@ public class Hex : MonoBehaviour {
 #endregion
 
 
-        // offset hexes
+        // offset hexes, on an odd row
         if (z % 2 == 1)
         {
             // UPLEFT HEX
@@ -469,7 +471,7 @@ public class Hex : MonoBehaviour {
                         for (int i = this.y; i <= mapMaker.yTall - 1; i++)
                         {
                             // went one too far up, set left hex one down
-                            if (mapMaker.hexMapArray[this.x - 1, i, this.z, this.q] == null)
+                            if (mapMaker.hexMapArray[this.x - 1, i, this.z + 1, this.q] == null)
                             {
                                 upLeftHex = mapMaker.hexMapArray[this.x - 1, i - 1, this.z + 1, this.q].gameObject;
                                 break;
@@ -729,16 +731,20 @@ public class Hex : MonoBehaviour {
         FillNeighborList();
     }
 
+    // clear pathfind
     public void ClearPathfind()
     {
-        foreach(Hex neighborHex in LNeighbors)
+        foreach(Hex fieldHex in mapMaker.listHexField)
         {
-            neighborHex.DefaultColor();
-            neighborHex.speed = 0;
+            fieldHex.DefaultColor();
+            fieldHex.speed = 0;
+            fieldHex.adjacentMove = false;
         }
+        mapMaker.listHexField.Clear();
     }
 
-    public void Pathfind(int PawnSpeed)
+    // pathfind movement
+    public void PathfindMovement(int PawnSpeed)
     {
         this.speed = PawnSpeed;
         foreach (Hex neighborHex in LNeighbors)
@@ -754,9 +760,26 @@ public class Hex : MonoBehaviour {
             }
             if (speed - cost > 0 && speed - cost > neighborHex.speed)
             {
+                if(!mapMaker.listHexField.Contains(neighborHex))
+                {
+                    mapMaker.listHexField.Add(neighborHex);
+                }
                 neighborHex.HighLight();
                 neighborHex.speed = speed - cost;
-                neighborHex.Pathfind(neighborHex.speed);
+                neighborHex.PathfindMovement(neighborHex.speed);
+            }
+        }
+    }
+
+    // direct movement
+    public void PathfindAdjacentMovement()
+    {
+        foreach(Hex neighborHex in LNeighbors)
+        {
+            if(neighborHex.speed > 0)
+            {
+                neighborHex.adjacentMove = true;
+                neighborHex.HighLightMove();
             }
         }
     }
@@ -790,6 +813,10 @@ public class Hex : MonoBehaviour {
 
     }
 
+    public void HighLightMove()
+    {
+        transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.green;
+    }
     public void HighLight()
     {
         transform.GetComponentInChildren<MeshRenderer>().materials[0].color = Color.red;
