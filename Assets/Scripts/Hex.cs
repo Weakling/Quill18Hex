@@ -17,12 +17,14 @@ public class Hex : MonoBehaviour {
     // GameObjects
     public GameObject upLeftHex, upRightHex, downLeftHex, downRightHex, leftHex, rightHex;
     public MapMaker mapMaker;
+    public MouseManager mouseManager;
     public List<Hex> LNeighbors;
 
 
     private void Awake()
     {
         mapMaker = FindObjectOfType<MapMaker>().GetComponent<MapMaker>();
+        mouseManager = FindObjectOfType<MouseManager>().GetComponent<MouseManager>();
         LNeighbors = new List<Hex>();
     }
 
@@ -749,7 +751,9 @@ public class Hex : MonoBehaviour {
         this.speed = PawnSpeed;
         foreach (Hex neighborHex in LNeighbors)
         {
+            // calculate cost, true cost used for height calculation
             int cost = 0;
+            int trueCost = 0;
             if(neighborHex.y < this.y)
             {
                 cost = 1;
@@ -758,15 +762,21 @@ public class Hex : MonoBehaviour {
             {
                 cost = neighborHex.y - this.y + 1;
             }
+            trueCost = neighborHex.y - this.y;
+
+            // check if speed is enough to move to new hex
             if (speed - cost > 0 && speed - cost > neighborHex.speed)
             {
-                if(!mapMaker.listHexField.Contains(neighborHex))
+                if(trueCost <= mouseManager.pawnCurrent.height)
                 {
-                    mapMaker.listHexField.Add(neighborHex);
+                    if (!mapMaker.listHexField.Contains(neighborHex))
+                    {
+                        mapMaker.listHexField.Add(neighborHex);
+                    }
+                    neighborHex.HighLight();
+                    neighborHex.speed = speed - cost;
+                    neighborHex.PathfindMovement(neighborHex.speed);
                 }
-                neighborHex.HighLight();
-                neighborHex.speed = speed - cost;
-                neighborHex.PathfindMovement(neighborHex.speed);
             }
         }
     }
@@ -776,7 +786,57 @@ public class Hex : MonoBehaviour {
     {
         foreach(Hex neighborHex in LNeighbors)
         {
-            if(neighborHex.speed > 0)
+            // calculate pawn height climbing
+            int trueCost = 0;
+            trueCost = neighborHex.y - this.y;
+
+            if(neighborHex.speed > 0 && trueCost <= mouseManager.pawnCurrent.height)
+            {
+                neighborHex.adjacentMove = true;
+                neighborHex.HighLightMove();
+            }
+        }
+    }
+
+    // pathfind heightless
+    public void PathfindHeightlessMovement(int PawnSpeed)
+    {
+        this.speed = PawnSpeed;
+
+        foreach (Hex neighborHex in LNeighbors)
+        {
+            // calculate cost
+            int cost = 1;
+            //int trueCost = 0;
+            /*if (neighborHex.y < this.y)
+            {
+                cost = 1;
+            }
+            else
+            {
+                cost = neighborHex.y - this.y + 1;
+            }*/
+            //trueCost = neighborHex.y - this.y;
+
+            if (this.speed - cost > 0 && speed - cost > neighborHex.speed)
+            {
+                if (!mapMaker.listHexField.Contains(neighborHex))
+                {
+                    mapMaker.listHexField.Add(neighborHex);
+                }
+                neighborHex.HighLight();
+                neighborHex.speed = speed - cost;
+                neighborHex.PathfindHeightlessMovement(neighborHex.speed);
+            }
+        }
+    }
+
+    // direct heightless movement
+    public void PathfindHeightlessAdjacentMovement()
+    {
+        foreach (Hex neighborHex in LNeighbors)
+        {
+            if (neighborHex.speed > 0)
             {
                 neighborHex.adjacentMove = true;
                 neighborHex.HighLightMove();

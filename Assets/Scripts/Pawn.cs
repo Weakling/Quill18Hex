@@ -8,7 +8,8 @@ public class Pawn : MonoBehaviour {
     // stats
     public int speedMax;
     public int speedLeft;
-
+    public int height;
+    public int size;
 
     // abilities
     public bool flying;

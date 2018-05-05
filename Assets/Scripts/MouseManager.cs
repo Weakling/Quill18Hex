@@ -223,8 +223,21 @@ public class MouseManager : MonoBehaviour {
             pawnCurrent = Pawn;
             
             Hex.ClearPathfind();
-            Hex.PathfindMovement(pawnCurrent.speedLeft + 1);
-            Hex.PathfindAdjacentMovement();
+
+            // land unit
+            if (!pawnCurrent.flying)
+            {
+                Hex.PathfindMovement(pawnCurrent.speedLeft + 1);
+                Hex.PathfindAdjacentMovement();
+            }
+            // flying unit
+            else
+            {
+
+                Hex.PathfindHeightlessMovement(pawnCurrent.speedLeft + 1);
+                Hex.PathfindHeightlessAdjacentMovement();
+            }
+            
         }
     }
 
@@ -236,14 +249,25 @@ public class MouseManager : MonoBehaviour {
 
     void MovePawn(Hex DestinationHex)
     {
-        int cost;
-        // clear movement hex grid
-        cost = DestinationHex.y - pawnCurrent.hexCurrent.y + 1;
-        if(cost <= 0)
+        int cost = 0;
+        
+
+        if (!pawnCurrent.flying)
+        {
+            cost = DestinationHex.y - pawnCurrent.hexCurrent.y + 1;
+        }
+        else
+        {
+            cost = 1;
+        }
+
+        if (cost <= 0)
         {
             cost = 1;
         }
         pawnCurrent.speedLeft -= cost;
+
+        // clear movement hex grid
         pawnCurrent.hexCurrent.ClearPathfind();
         pawnCurrent.hexCurrent.speed = 0;
         pawnCurrent.hexCurrent.pawnPresent = null;
