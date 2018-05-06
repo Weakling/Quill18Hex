@@ -751,32 +751,46 @@ public class Hex : MonoBehaviour {
         this.speed = PawnSpeed;
         foreach (Hex neighborHex in LNeighbors)
         {
-            // calculate cost, true cost used for height calculation
-            int cost = 0;
+            // create cost variables
+            int cost = 1;
             int trueCost = 0;
-            if(neighborHex.y < this.y)
-            {
-                cost = 1;
-            }
-            else
-            {
-                cost = neighborHex.y - this.y + 1;
-            }
-            trueCost = neighborHex.y - this.y;
 
+            // land unity, calculate height cost and true height
+            if(!mouseManager.pawnCurrent.flying)
+            {
+                if (neighborHex.y < this.y)
+                {
+                    cost = 1;
+                }
+                else
+                {
+                    cost = neighborHex.y - this.y + 1;
+                }
+                trueCost = neighborHex.y - this.y;
+            }
+            
             // check if speed is enough to move to new hex
             if (speed - cost > 0 && speed - cost > neighborHex.speed)
             {
-                if(trueCost <= mouseManager.pawnCurrent.height)
+                // land unit
+                if (!mouseManager.pawnCurrent.flying)
                 {
-                    if (!mapMaker.listHexField.Contains(neighborHex))
+                    // too short
+                    if (trueCost >= mouseManager.pawnCurrent.height)
                     {
-                        mapMaker.listHexField.Add(neighborHex);
+                        return;
                     }
-                    neighborHex.HighLight();
-                    neighborHex.speed = speed - cost;
-                    neighborHex.PathfindMovement(neighborHex.speed);
                 }
+
+                // add hex to list if not there
+                if (!mapMaker.listHexField.Contains(neighborHex))
+                {
+                    mapMaker.listHexField.Add(neighborHex);
+                }
+
+                neighborHex.HighLight();
+                neighborHex.speed = speed - cost;
+                neighborHex.PathfindMovement(neighborHex.speed);
             }
         }
     }
@@ -798,51 +812,6 @@ public class Hex : MonoBehaviour {
         }
     }
 
-    // pathfind heightless
-    public void PathfindHeightlessMovement(int PawnSpeed)
-    {
-        this.speed = PawnSpeed;
-
-        foreach (Hex neighborHex in LNeighbors)
-        {
-            // calculate cost
-            int cost = 1;
-            //int trueCost = 0;
-            /*if (neighborHex.y < this.y)
-            {
-                cost = 1;
-            }
-            else
-            {
-                cost = neighborHex.y - this.y + 1;
-            }*/
-            //trueCost = neighborHex.y - this.y;
-
-            if (this.speed - cost > 0 && speed - cost > neighborHex.speed)
-            {
-                if (!mapMaker.listHexField.Contains(neighborHex))
-                {
-                    mapMaker.listHexField.Add(neighborHex);
-                }
-                neighborHex.HighLight();
-                neighborHex.speed = speed - cost;
-                neighborHex.PathfindHeightlessMovement(neighborHex.speed);
-            }
-        }
-    }
-
-    // direct heightless movement
-    public void PathfindHeightlessAdjacentMovement()
-    {
-        foreach (Hex neighborHex in LNeighbors)
-        {
-            if (neighborHex.speed > 0)
-            {
-                neighborHex.adjacentMove = true;
-                neighborHex.HighLightMove();
-            }
-        }
-    }
 
     public void FillNeighborList()
     {

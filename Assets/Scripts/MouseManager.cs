@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 public class MouseManager : MonoBehaviour {
 
 
+    public int team;
+
     // our hit object
     private GameObject ourHitObject;
 
@@ -224,20 +226,9 @@ public class MouseManager : MonoBehaviour {
             
             Hex.ClearPathfind();
 
-            // land unit
-            if (!pawnCurrent.flying)
-            {
-                Hex.PathfindMovement(pawnCurrent.speedLeft + 1);
-                Hex.PathfindAdjacentMovement();
-            }
-            // flying unit
-            else
-            {
-
-                Hex.PathfindHeightlessMovement(pawnCurrent.speedLeft + 1);
-                Hex.PathfindHeightlessAdjacentMovement();
-            }
-            
+            // pathfind unit
+            Hex.PathfindMovement(pawnCurrent.speedLeft + 1);
+            Hex.PathfindAdjacentMovement();
         }
     }
 
