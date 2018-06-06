@@ -4,11 +4,23 @@ using UnityEngine;
 
 public class MyGameManager : MonoBehaviour {
 
+
+    public List<Pawn> player1Army, player2Army;
+
+    int numPlayers;
+    int currentTurn;
+    int phase;
+
     public bool create;
 
+    private void Awake()
+    {
+        player1Army = new List<Pawn>();
+        player2Army = new List<Pawn>();
+    }
 
-	// Use this for initialization
-	void Start () {
+    void Start ()
+    {
 		
 	}
 	
@@ -20,7 +32,10 @@ public class MyGameManager : MonoBehaviour {
 
 
 
+    void FillArmyLists()
+    {
 
+    }
 
 
 
