@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class MyGameManager : MonoBehaviour {
-
+public class MyGameManager : NetworkBehaviour
+{
 
     public List<Pawn> player1Army, player2Army;
 
@@ -15,13 +16,13 @@ public class MyGameManager : MonoBehaviour {
 
     private void Awake()
     {
-        player1Army = new List<Pawn>();
+        //player1Army = new List<Pawn>();
         player2Army = new List<Pawn>();
     }
 
     void Start ()
     {
-		
+        CmdSpawnMyUnit();
 	}
 	
 	// Update is called once per frame
@@ -37,6 +38,14 @@ public class MyGameManager : MonoBehaviour {
 
     }
 
+    [Command]
+    void CmdSpawnMyUnit()
+    {
+        print("moo");
+        GameObject go = Instantiate(player1Army[0].gameObject);
+
+        NetworkServer.Spawn(go);
+    }
 
 
     /*public void PathfindMovement(int PawnSpeed)

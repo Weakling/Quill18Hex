@@ -1,13 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerObject : MonoBehaviour {
+public class PlayerObject : NetworkBehaviour {
 
-	// Use this for initialization
-	void Start ()
+    private void Awake()
     {
-        Debug.Log("This is my player " + this.gameObject);
+        if(!isLocalPlayer)
+        {
+            return;
+            Debug.Log("This is my player " + this.gameObject);
+        }
+    }
+
+    // Use this for initialization
+    void Start ()
+    {
+        
 	}
 	
 	// Update is called once per frame
