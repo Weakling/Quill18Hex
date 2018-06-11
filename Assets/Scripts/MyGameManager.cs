@@ -5,10 +5,13 @@ using UnityEngine.Networking;
 
 public class MyGameManager : NetworkBehaviour
 {
-
+    
     public List<Pawn> player1Army, player2Army;
+    public bool p1Ready, p2Ready, p1ArmyChosen, p2ArmyChosen;
 
-    int numPlayers;
+    [SyncVar]
+    public int numPlayers;
+
     int currentTurn;
     int phase;
 
@@ -22,6 +25,7 @@ public class MyGameManager : NetworkBehaviour
 
     void Start ()
     {
+        print("I'm here");
         CmdSpawnMyUnit();
 	}
 	
@@ -41,11 +45,10 @@ public class MyGameManager : NetworkBehaviour
     [Command]
     void CmdSpawnMyUnit()
     {
-        print("moo");
-        GameObject go = Instantiate(player1Army[0].gameObject);
-
-        NetworkServer.Spawn(go);
+        //GameObject go = Instantiate(player1Army[0].gameObject);
+        //NetworkServer.Spawn(go);
     }
+
 
 
     /*public void PathfindMovement(int PawnSpeed)
