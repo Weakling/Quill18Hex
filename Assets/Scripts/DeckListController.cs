@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DeckListController : MonoBehaviour {
 
-    [SerializeField]
+    /*[SerializeField]
     private GameObject buttonTemplate;
 
     List<int> intList;
@@ -17,7 +17,7 @@ public class DeckListController : MonoBehaviour {
             GameObject button = Instantiate(buttonTemplate) as GameObject;
             button.SetActive(true);
 
-            button.GetComponent<DeckListItem>().SetText("Button #" + i);
+            //button.GetComponent<DeckListItem>().SetText("Button #" + i);
 
             button.transform.SetParent(buttonTemplate.transform.parent, false);
 
@@ -27,5 +27,5 @@ public class DeckListController : MonoBehaviour {
     public void ButtonClicked(string myTextString)
     {
         Debug.Log(myTextString);
-    }
+    }*/
 }

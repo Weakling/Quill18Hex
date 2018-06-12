@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenu : MonoBehaviour {
 
-    public Text txtPlayerName;
+
+    public TextMeshProUGUI txtPlayerName;
     public Text txtInputNewName;
     private string nameStore;
 
@@ -18,7 +20,6 @@ public class MainMenu : MonoBehaviour {
     private void Awake()
     {
         mapMaker = FindObjectOfType<MapMaker>();
-
     }
 
     private void Start()
@@ -50,7 +51,7 @@ public class MainMenu : MonoBehaviour {
 
     public void GOMapMaker()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
     }
 
     public void GOChangeName()

@@ -1,25 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using TMPro;
 
-public class DeckListItem : MonoBehaviour {
+public class DeckListItem : MonoBehaviour, IPointerClickHandler
+{
+    [HideInInspector] public ArmyBuilderMenu armyBuilder;
+    [HideInInspector] public Card card;
+    [HideInInspector] public bool isUnique;
 
-    [SerializeField]
-    private Text txtMyText;
+    public TextMeshProUGUI txtMyText;
 
-    public DeckListController deckListController;
 
-    private string myTextString;
-
-    public void SetText(string textString)
+    // detect click
+    public void OnPointerClick(PointerEventData pointerEventData)
     {
-        myTextString = textString;
-        txtMyText.text = textString;
-    }
+        if (pointerEventData.button == PointerEventData.InputButton.Left)
+        {
+            armyBuilder._deckCurrent.Remove(card);
 
-    public void OnClick()
-    {
-        deckListController.ButtonClicked(myTextString);
+            if(card.numCopies >= card.maxCopies)
+            {
+                card.numCopies--;
+                card.SetCardActive();
+            }
+            
+            Destroy(this.gameObject);
+        }
+
+        else if (pointerEventData.button == PointerEventData.InputButton.Middle)
+        {
+
+        }
+
+        else if (pointerEventData.button == PointerEventData.InputButton.Right)
+        {
+            
+        }
     }
 }
