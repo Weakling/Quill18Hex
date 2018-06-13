@@ -20,12 +20,9 @@ public class DeckListItem : MonoBehaviour, IPointerClickHandler
         {
             armyBuilder._deckCurrent.Remove(card);
 
-            if(card.numCopies >= card.maxCopies)
-            {
-                card.numCopies--;
-                card.SetCardActive();
-            }
-            
+            card.numCopies--;
+            card.SetCardActive();
+
             Destroy(this.gameObject);
         }
 

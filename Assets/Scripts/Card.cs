@@ -19,11 +19,11 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public bool isUnique;
     public bool isSquad;
-    public bool isClickable;
+    public bool isHero;
+    [HideInInspector] public bool isClickable;
 
     public string attName;
 
-    public string attType;
     public string attRace;
     public string attClass;
     public string attSizeBody;
@@ -63,9 +63,11 @@ public class Card : MonoBehaviour, IPointerClickHandler
     {
         SetStatValues();
         SetTextFields();
+        
+    
 
         isClickable = true;
-        if(isUnique)
+        if(isHero)
         {
             maxCopies = 1;
         }
@@ -80,7 +82,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
             armyBuilderMenu = FindObjectOfType<ArmyBuilderMenu>();
             deckListContent = FindObjectOfType<DeckListController>().gameObject;
         }
-	}
+
+        CreatePanel();
+    }
 	
 
     void SetTextFields()
@@ -93,7 +97,22 @@ public class Card : MonoBehaviour, IPointerClickHandler
         txtDefense.text = statCurrentDefense.ToString();
         txtCost.text = statCost.ToString();
 
-        txtType.text = attType;
+
+        if(isSquad)
+        {
+            txtType.text = "Squad";
+        }
+        else if(isHero)
+        {
+            txtType.text = "Hero";
+        }
+
+        if(isUnique)
+        {
+            txtType.text = "Unique " + txtType.text;
+        }
+
+
         txtRace.text = attRace;
         txtClass.text = attClass;
         txtSize.text = attSizeBody + " " + attSizeHeight;
@@ -128,6 +147,16 @@ public class Card : MonoBehaviour, IPointerClickHandler
         isClickable = false;
         deckListItem.isUnique = true;
         myPanel.gameObject.SetActive(true);
+    }
+
+    void CreatePanel()
+    {
+        myPanel = new GameObject("myPanel").AddComponent<Image>();
+        myPanel.transform.SetParent(this.transform);
+        myPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(230, 345);
+        myPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        myPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 180);
+        myPanel.gameObject.SetActive(false);
     }
 
     // click
