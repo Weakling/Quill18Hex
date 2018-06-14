@@ -16,21 +16,17 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     // references
     Card thisCard;
+    public Image myPanel;
 
     // conditions
     [HideInInspector] public bool isClickable;
     [HideInInspector] public int numCopies;
     [HideInInspector] public int maxCopies;
 
-    // types
-    public bool isUnique;
-    public bool isSquad;
-    public bool isHero;
-
     // enums
-    public enum EnRace { Dragon, Drow, Elf, Marro, Nargrub, Orc, Soulborg, Troll, Trolticor, Viper };
-    public enum EnClass { Arachnomancer, Archer, Beast, Champion, Cow, Deathwalker, Guard, Hive, Hivelord, Hunter, Major, Mount, Scout, Stinger, Warlord, Warrior, Young };
-    public enum EnTrait { Devout, Ferocious, Loyal, Merciful, Precise, Terrifying, Tricky, Wild };
+    public enum EnRace { Doggin, Dragon, Drow, Eladrin, Elf, Human, Kyrie, Marro, Nargrub, Orc, Soulborg, Troll, Trolticor, Viper };
+    public enum EnClass { Agent, Arachnomancer, Archer, Archmage, Beast, Champion, Cow, Deathwalker, Guard, Hive, Hivelord, Hunter, King, Major, Mount, Scout, Stinger, Soldier, Warlord, Warrior, Wizard, Young };
+    public enum EnTrait { Devout, Disciplined, Ferocious, Loyal, Merciful, Precise, Resolute, Terrifying, Tricky, Valiant, Wild };
     public enum EnSize { Small, Medium, Large, Huge };
     public enum EnFaction { Necro, Tera, Phaze, Neutral };
     public enum EnType { Squad, Hero, UniqueSquad, UniqueHero };
@@ -62,13 +58,13 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public string keyword1, keyword2, keyword3, keyword4, keyword5;
     
-
+    // text
     public TextMeshProUGUI txtName, txtLife, txtMove, txtRange, txtAttack, txtDefense, txtCost;
     public TextMeshProUGUI txtType, txtRace, txtClass, txtSize, txtTrait;
     public TextMeshProUGUI txtAbility1, txtAbility2, txtAbility3, txtAbility4, txtAbility5;
     public TextMeshProUGUI txtFaction;
 
-    public Image myPanel;
+    
 
     private void Awake()
     {
@@ -82,9 +78,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
         SetTextFields();
         
         
-
+        // set values
         isClickable = true;
-        if(isHero)
+        if(attType == EnType.UniqueHero || attType == EnType.UniqueSquad)
         {
             maxCopies = 1;
         }
@@ -93,7 +89,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
             maxCopies = 3;
         }
 
-        // in army builder
+        // is in army builder menu
         if(stateManager.armyBuilder)
         {
             armyBuilderMenu = FindObjectOfType<ArmyBuilderMenu>();
@@ -104,6 +100,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
     }
 	
 
+    // set and create things
     void SetTextFields()
     {
         txtName.text = attName;
@@ -155,6 +152,18 @@ public class Card : MonoBehaviour, IPointerClickHandler
         statCurrentDefense = statMaxDefense;
     }
 
+    void CreatePanel()
+    {
+        myPanel = new GameObject("myPanel").AddComponent<Image>();
+        myPanel.transform.SetParent(this.transform);
+        myPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(230, 345);
+        myPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        myPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 180);
+        myPanel.gameObject.SetActive(false);
+    }
+
+
+    // active/inactive
     public void SetCardActive()
     {
         isClickable = true;
@@ -168,15 +177,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
         myPanel.gameObject.SetActive(true);
     }
 
-    void CreatePanel()
-    {
-        myPanel = new GameObject("myPanel").AddComponent<Image>();
-        myPanel.transform.SetParent(this.transform);
-        myPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(230, 345);
-        myPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-        myPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 180);
-        myPanel.gameObject.SetActive(false);
-    }
+    
 
     // click
     public void OnPointerClick(PointerEventData pointerEventData)
@@ -220,6 +221,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
             armyBuilderMenu._deckCurrent.Remove(this.GetComponent<Card>());
         }
     }
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {

@@ -30,21 +30,29 @@ public class CardCreator : Card {
         CreateCard("Zettian Guards", EnRace.Soulborg, EnType.UniqueSquad, EnClass.Guard, EnSize.Medium, EnTrait.Precise, EnFaction.Necro, 5, 70, 1, 4, 7, 2, 7);
         CreateCard("Deathwalker 8000", EnRace.Soulborg, EnType.UniqueHero, EnClass.Deathwalker, EnSize.Large, EnTrait.Precise, EnFaction.Necro, 7, 130, 1, 5, 7, 3, 8);
         CreateCard("Deathwalker 9000", EnRace.Soulborg, EnType.UniqueHero, EnClass.Deathwalker, EnSize.Large, EnTrait.Precise, EnFaction.Necro, 7, 140, 1, 5, 7, 4, 9);
-
-
-
+        
         // tera
         CreateCard("Syvarris", EnRace.Elf, EnType.UniqueHero, EnClass.Archer, EnSize.Medium, EnTrait.Precise, EnFaction.Tera, 5, 100, 4, 5, 9, 3, 2);
         CreateCard("Elite Onyx Vipers", EnRace.Viper, EnType.UniqueSquad, EnClass.Scout, EnSize.Medium, EnTrait.Precise, EnFaction.Tera, 5, 100, 1, 7, 1, 3, 2);
+        CreateCard("Sonlen", EnRace.Elf, EnType.UniqueHero, EnClass.Archmage, EnSize.Medium, EnTrait.Tricky, EnFaction.Tera, 5, 160, 6, 5, 6, 4, 3);
+        CreateCard("Charos", EnRace.Dragon, EnType.UniqueHero, EnClass.King, EnSize.Huge, EnTrait.Valiant, EnFaction.Tera, 9, 210, 9, 5, 1, 5, 5);
 
         // phase
-
+        CreateCard("Major Q10", EnRace.Soulborg, EnType.UniqueHero, EnClass.Major, EnSize.Large, EnTrait.Merciful, EnFaction.Neutral, 6, 150, 4, 5, 9, 4, 5);
+        CreateCard("Krav Maga Agents", EnRace.Human, EnType.UniqueSquad, EnClass.Agent, EnSize.Medium, EnTrait.Tricky, EnFaction.Phaze, 4, 100, 1, 6, 7, 3, 3);
+        CreateCard("Agent Carr", EnRace.Human, EnType.UniqueHero, EnClass.Agent, EnSize.Medium, EnTrait.Tricky, EnFaction.Phaze, 5, 100, 4, 5, 6, 2, 4);
+        CreateCard("Dund", EnRace.Doggin, EnType.UniqueHero, EnClass.Hunter, EnSize.Large, EnTrait.Tricky, EnFaction.Phaze, 4, 110, 4, 6, 1, 3, 5);
 
         // neutral
-        CreateCard("Major Q10", EnRace.Soulborg, EnType.UniqueHero, EnClass.Major, EnSize.Large, EnTrait.Merciful, EnFaction.Neutral, 6, 150, 4, 5, 9, 4, 5);
-        //CreateCard("Sgt. Drake Alexander", EnRace.Human, EnType.UniqueHero, EnClass.Soldier, EnSize.Medium, EnTrait.Valiant, EnFaction.Necro, 5, 170, 6, 6, 1, 6, 4);
-
-
+        CreateCard("Raelin", EnRace.Kyrie, EnType.UniqueHero, EnClass.Warrior, EnSize.Medium, EnTrait.Merciful, EnFaction.Phaze, 5, 80, 5, 6, 1, 3, 3);
+        CreateCard("Raelin Elite", EnRace.Kyrie, EnType.UniqueHero, EnClass.Warlord, EnSize.Medium, EnTrait.Resolute, EnFaction.Phaze, 5, 120, 5, 6, 1, 3, 3);
+        CreateCard("Airborne Elite", EnRace.Human, EnType.UniqueSquad, EnClass.Soldier, EnSize.Medium, EnTrait.Disciplined, EnFaction.Phaze, 5, 110, 1, 4, 8, 3, 2);
+        CreateCard("Sgt. Drake Alexander", EnRace.Human, EnType.UniqueHero, EnClass.Soldier, EnSize.Medium, EnTrait.Valiant, EnFaction.Phaze, 5, 110, 5, 5, 1, 6, 3);
+        CreateCard("Sgt. Drake Alexander", EnRace.Human, EnType.UniqueHero, EnClass.Soldier, EnSize.Medium, EnTrait.Valiant, EnFaction.Phaze, 5, 170, 6, 6, 1, 6, 4);
+        CreateCard("Tarn Viking Warriors", EnRace.Human, EnType.UniqueSquad, EnClass.Warrior, EnSize.Medium, EnTrait.Wild, EnFaction.Phaze, 5, 50, 1, 4, 1, 3, 4);
+        CreateCard("Finn the Viking Champion", EnRace.Human, EnType.UniqueHero, EnClass.Champion, EnSize.Medium, EnTrait.Valiant, EnFaction.Phaze, 5, 80, 4, 5, 1, 3, 4);
+        CreateCard("Thorgrim the Viking Champion", EnRace.Human, EnType.UniqueHero, EnClass.Champion, EnSize.Medium, EnTrait.Valiant, EnFaction.Phaze, 5, 80, 4, 5, 1, 3, 4);
+        CreateCard("Erevan Sunshadow", EnRace.Eladrin, EnType.UniqueHero, EnClass.Wizard, EnSize.Medium, EnTrait.Precise, EnFaction.Phaze, 5, 80, 5, 6, 1, 2, 2);
     }
 	
 
