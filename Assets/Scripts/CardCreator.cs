@@ -39,9 +39,9 @@ public class CardCreator : Card {
 
         // phase
         CreateCard("Major Q10", EnRace.Soulborg, EnType.UniqueHero, EnClass.Major, EnSize.Large, EnTrait.Merciful, EnFaction.Neutral, 6, 150, 4, 5, 9, 4, 5);
-        CreateCard("Krav Maga Agents", EnRace.Human, EnType.UniqueSquad, EnClass.Agent, EnSize.Medium, EnTrait.Tricky, EnFaction.Phaze, 4, 100, 1, 6, 7, 3, 3);
-        CreateCard("Agent Carr", EnRace.Human, EnType.UniqueHero, EnClass.Agent, EnSize.Medium, EnTrait.Tricky, EnFaction.Phaze, 5, 100, 4, 5, 6, 2, 4);
-        CreateCard("Dund", EnRace.Doggin, EnType.UniqueHero, EnClass.Hunter, EnSize.Large, EnTrait.Tricky, EnFaction.Phaze, 4, 110, 4, 6, 1, 3, 5);
+        CreateCard("Krav Maga Agents", EnRace.Human, EnType.UniqueSquad, EnClass.Agent, EnSize.Medium, EnTrait.Tricky, EnFaction.Neutral, 4, 100, 1, 6, 7, 3, 3);
+        CreateCard("Agent Carr", EnRace.Human, EnType.UniqueHero, EnClass.Agent, EnSize.Medium, EnTrait.Tricky, EnFaction.Neutral, 5, 100, 4, 5, 6, 2, 4);
+        CreateCard("Dund", EnRace.Doggin, EnType.UniqueHero, EnClass.Hunter, EnSize.Large, EnTrait.Tricky, EnFaction.Neutral, 4, 110, 4, 6, 1, 3, 5);
 
         // neutral
         CreateCard("Raelin", EnRace.Kyrie, EnType.UniqueHero, EnClass.Warrior, EnSize.Medium, EnTrait.Merciful, EnFaction.Phaze, 5, 80, 5, 6, 1, 3, 3);

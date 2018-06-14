@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using System.IO;
 
 
 public class ArmyBuilderMenu : MonoBehaviour {
@@ -28,6 +29,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         LoadLists();
         //LoadCardGrid();
         GONecro();
+        //SaveDeck();
 	}
 
 
@@ -36,6 +38,34 @@ public class ArmyBuilderMenu : MonoBehaviour {
         
     }
 
+
+
+
+
+
+
+    public void SaveDeck(string DeckName)
+    {
+        // path of file
+        //string path = Application.dataPath + "/Log.txt";
+        string path = "Assets/Resources/" + DeckName + ".txt";
+
+        string content = "";
+        File.AppendAllText(path, content);
+
+        // create file if not there
+        /*if(!File.Exists(path))
+        {
+            File.WriteAllText(path, "Login log \n\n");
+        }*/
+
+        // content of the file
+        //string content = "Login date: " + System.DateTime.Now + "\n";
+
+
+
+
+    }
 
 
 
