@@ -26,7 +26,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
     {
         // load resources
         LoadLists();
-        LoadCardGrid();
+        //LoadCardGrid();
         GONecro();
 	}
 

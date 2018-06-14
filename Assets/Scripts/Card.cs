@@ -6,31 +6,48 @@ using TMPro;
 
 public class Card : MonoBehaviour, IPointerClickHandler
 {
+
+    // other classes
     StateManager stateManager;
     ArmyBuilderMenu armyBuilderMenu;
     GameObject deckListContent;
     public DeckListItem deckListItemPrefab;
     DeckListItem deckListItem;
 
+    // references
+    Card thisCard;
+
+    // conditions
+    [HideInInspector] public bool isClickable;
     [HideInInspector] public int numCopies;
     [HideInInspector] public int maxCopies;
 
-    Card thisCard;
-
+    // types
     public bool isUnique;
     public bool isSquad;
     public bool isHero;
-    [HideInInspector] public bool isClickable;
+
+    // enums
+    public enum EnRace { Dragon, Drow, Elf, Marro, Nargrub, Orc, Soulborg, Troll, Trolticor, Viper };
+    public enum EnClass { Arachnomancer, Archer, Beast, Champion, Cow, Deathwalker, Guard, Hive, Hivelord, Hunter, Major, Mount, Scout, Stinger, Warlord, Warrior, Young };
+    public enum EnTrait { Devout, Ferocious, Loyal, Merciful, Precise, Terrifying, Tricky, Wild };
+    public enum EnSize { Small, Medium, Large, Huge };
+    public enum EnFaction { Necro, Tera, Phaze, Neutral };
+    public enum EnType { Squad, Hero, UniqueSquad, UniqueHero };
+
+    // attributes
+    public EnRace attRace;
+    public EnClass attClass;
+    public EnTrait attTrait;
+    public EnSize attSize;
+    public EnFaction attFaction;
+    public EnType attType;
 
     public string attName;
-
-    public string attRace;
-    public string attClass;
-    public string attSizeBody;
     public int attSizeHeight;
-    public string attTrait;
+    public int attCost;
     
-
+    // stats
     public int statMaxLife;
     [HideInInspector] public int statCurrentLife;
     public int statMaxMove;
@@ -41,10 +58,10 @@ public class Card : MonoBehaviour, IPointerClickHandler
     [HideInInspector] public int statCurrentAttack;
     public int statMaxDefense;
     [HideInInspector] public int statCurrentDefense;
-    public int statCost;
+    
 
     public string keyword1, keyword2, keyword3, keyword4, keyword5;
-    public string faction;
+    
 
     public TextMeshProUGUI txtName, txtLife, txtMove, txtRange, txtAttack, txtDefense, txtCost;
     public TextMeshProUGUI txtType, txtRace, txtClass, txtSize, txtTrait;
@@ -64,7 +81,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
         SetStatValues();
         SetTextFields();
         
-    
+        
 
         isClickable = true;
         if(isHero)
@@ -95,28 +112,30 @@ public class Card : MonoBehaviour, IPointerClickHandler
         txtRange.text = statCurrentRange.ToString();
         txtAttack.text = statCurrentAttack.ToString();
         txtDefense.text = statCurrentDefense.ToString();
-        txtCost.text = statCost.ToString();
+        txtCost.text = attCost.ToString();
 
 
-        if(isSquad)
+        if(attType == EnType.Squad)
         {
             txtType.text = "Squad";
         }
-        else if(isHero)
+        else if(attType == EnType.UniqueHero)
+        {
+            txtType.text = "Unique Hero";
+        }
+        else if(attType == EnType.UniqueSquad)
+        {
+            txtType.text = "UniqueSquad";
+        }
+        else if(attType == EnType.Hero)
         {
             txtType.text = "Hero";
         }
 
-        if(isUnique)
-        {
-            txtType.text = "Unique " + txtType.text;
-        }
-
-
-        txtRace.text = attRace;
-        txtClass.text = attClass;
-        txtSize.text = attSizeBody + " " + attSizeHeight;
-        txtTrait.text = attTrait;
+        txtRace.text = attRace.ToString();
+        txtClass.text = attClass.ToString();
+        txtSize.text = attSize.ToString() + " " + attSizeHeight;
+        txtTrait.text = attTrait.ToString();
 
         txtAbility1.text = keyword1;
         txtAbility2.text = keyword2;
@@ -124,7 +143,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
         txtAbility4.text = keyword4;
         txtAbility5.text = keyword5;
 
-        txtFaction.text = faction;
+        txtFaction.text = attFaction.ToString();
     }
 
     void SetStatValues()
