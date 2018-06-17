@@ -42,6 +42,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public string attName;
     public int attSizeHeight;
     public int attCost;
+    public int attNumberCard;
     
     // stats
     public int statMaxLife;

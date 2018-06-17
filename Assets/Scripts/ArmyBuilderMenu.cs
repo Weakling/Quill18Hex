@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using System.IO;
-
+using UnityEngine.UI;
 
 public class ArmyBuilderMenu : MonoBehaviour {
 
@@ -12,6 +12,10 @@ public class ArmyBuilderMenu : MonoBehaviour {
     public List<Card> _deckCurrent;
 
     public Transform deckGridNecro, deckGridTera, deckGridPhaze, deckGridNeutral;
+
+    public Text txtDeckNameInput;
+
+    public string[] _masterDeckList;
 
     private void Awake()
     {
@@ -30,6 +34,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         //LoadCardGrid();
         GONecro();
         //SaveDeck();
+        ReadDeckList();
 	}
 
 
@@ -42,15 +47,29 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
 
 
-
+    
 
     public void SaveDeck(string DeckName)
     {
+        print("I wrote");
+        
         // path of file
         //string path = Application.dataPath + "/Log.txt";
-        string path = "Assets/Resources/" + DeckName + ".txt";
+        string path = "Assets/Resources/decks/" + DeckName + ".txt";
 
         string content = "";
+
+        foreach(Card c in _deckCurrent)
+        {
+            content = content + c.attNumberCard.ToString() + "\n";
+        }
+
+        File.WriteAllText(path, content);
+
+        // save name to master deck list
+        path = "Assets/Resources/decks/MasterDeckList.txt";
+        content = DeckName + "\n";
+
         File.AppendAllText(path, content);
 
         // create file if not there
@@ -61,13 +80,14 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
         // content of the file
         //string content = "Login date: " + System.DateTime.Now + "\n";
-
-
-
-
     }
 
-
+    public void ReadDeckList()
+    {
+        string path = "Assets/Resources/decks/MasterDeckList.txt";
+        _masterDeckList = File.ReadAllLines(path);
+        
+    }
 
 
     public void LoadCardGrid()
@@ -115,6 +135,23 @@ public class ArmyBuilderMenu : MonoBehaviour {
         _cardsTera = Resources.LoadAll("ready/tera", typeof(Card)).Cast<Card>().ToList();
     }
 
+    public void GOSaveDeck()
+    {
+        if (txtDeckNameInput.text.Any(char.IsLetterOrDigit))
+        {
+            SaveDeck(txtDeckNameInput.text);
+        }
+    }
+
+    public void GOReadDeckList()
+    {
+        ReadDeckList();
+    }
+
+    public void GODeleteDeck()
+    {
+
+    }
 
     public void GONecro()
     {
