@@ -7,6 +7,7 @@ public class CardCreator : Card {
     public Card cardPrefab;
     public Transform contentNecro, contentTera, contentPhaze, contentNeutral;
 
+    public List<Card> _masterCardList = new List<Card>();
 
 
 	void Start ()
@@ -102,6 +103,24 @@ public class CardCreator : Card {
         else if (newCard.attFaction == EnFaction.Neutral)
         {
             newCard.transform.SetParent(contentNeutral);
+        }
+
+        // add to card list
+        _masterCardList.Add(newCard);
+    }
+
+    void CreateCard(int NumberCard)
+    {
+        switch(NumberCard)
+        {
+            case 1:
+                print("moo");
+                break;
+
+            case 2:
+                break;
+
+                
         }
     }
 }

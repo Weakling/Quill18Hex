@@ -15,7 +15,10 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
     public Text txtDeckNameInput;
 
+    // deck storage
     public string[] _masterDeckList;
+    string strDeckDir, strMasterDeckDir;
+    public DeckButton deckButtonPrefab;
 
     private void Awake()
     {
@@ -29,12 +32,18 @@ public class ArmyBuilderMenu : MonoBehaviour {
     
     void Start ()
     {
+        // set dir
+        strDeckDir = "Assets/Resources/decks/";
+        strMasterDeckDir = "Assets/Resources/decks/MasterDeckList.txt";
+
         // load resources
         LoadLists();
         //LoadCardGrid();
         GONecro();
         //SaveDeck();
         ReadDeckList();
+
+
 	}
 
 
@@ -51,44 +60,67 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
     public void SaveDeck(string DeckName)
     {
-        print("I wrote");
-        
         // path of file
-        //string path = Application.dataPath + "/Log.txt";
-        string path = "Assets/Resources/decks/" + DeckName + ".txt";
-
+        string path = strDeckDir + DeckName + ".txt";
         string content = "";
+        string[] _deckList;
 
+        // set content
         foreach(Card c in _deckCurrent)
         {
             content = content + c.attNumberCard.ToString() + "\n";
         }
 
+        // write content
         File.WriteAllText(path, content);
 
-        // save name to master deck list
-        path = "Assets/Resources/decks/MasterDeckList.txt";
-        content = DeckName + "\n";
-
-        File.AppendAllText(path, content);
-
-        // create file if not there
-        /*if(!File.Exists(path))
+        // check deck list for existing
+        path = strMasterDeckDir;
+        _deckList = File.ReadAllLines(path);
+        foreach(string s in _deckList)
         {
-            File.WriteAllText(path, "Login log \n\n");
-        }*/
+            if(s == DeckName)
+            {
+                return;
+            }
+        }
 
-        // content of the file
-        //string content = "Login date: " + System.DateTime.Now + "\n";
+        // save new name to deck list
+        content = DeckName + "\n";
+        File.AppendAllText(path, content);
+    }
+
+    public void LoadDeck(string DeckName)
+    {
+
     }
 
     public void ReadDeckList()
     {
-        string path = "Assets/Resources/decks/MasterDeckList.txt";
+        string path = strMasterDeckDir;
         _masterDeckList = File.ReadAllLines(path);
         
     }
 
+    public void DeleteDeck(string DeckName)
+    { 
+        // delete txt
+        string path = strDeckDir + DeckName + ".txt";
+        File.Delete(path);
+
+        // delete from deck list
+        path = strMasterDeckDir;
+        string[] _deckList = File.ReadAllLines(path);
+        List<string> _newDeckList = new List<string>();
+        foreach (string s in _deckList)
+        {
+            if (s != DeckName)
+            {
+                _newDeckList.Add(s);
+            }
+        }
+        File.WriteAllLines(path, _newDeckList.ToArray());
+    }
 
     public void LoadCardGrid()
     {
@@ -143,6 +175,14 @@ public class ArmyBuilderMenu : MonoBehaviour {
         }
     }
 
+    public void GOLoadDeck()
+    {
+        if (txtDeckNameInput.text.Any(char.IsLetterOrDigit))
+        {
+            LoadDeck(txtDeckNameInput.text);
+        }
+    }
+
     public void GOReadDeckList()
     {
         ReadDeckList();
@@ -150,7 +190,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
     public void GODeleteDeck()
     {
-
+        DeleteDeck(txtDeckNameInput.text);
     }
 
     public void GONecro()
@@ -191,3 +231,13 @@ public class ArmyBuilderMenu : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 }
+
+//string path = Application.dataPath + "/Log.txt";
+// create file if not there
+/*if(!File.Exists(path))
+{
+    File.WriteAllText(path, "Login log \n\n");
+}*/
+
+// content of the file
+//string content = "Login date: " + System.DateTime.Now + "\n";

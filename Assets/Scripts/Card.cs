@@ -178,7 +178,25 @@ public class Card : MonoBehaviour, IPointerClickHandler
         myPanel.gameObject.SetActive(true);
     }
 
-    
+    public void AddCardToDeck()
+    {
+        // add to deck list
+        armyBuilderMenu._deckCurrent.Add(thisCard);
+
+        // add visually to deck list
+        deckListItem = Instantiate(deckListItemPrefab, deckListContent.transform);
+        deckListItem.card = this.GetComponent<Card>();
+        deckListItem.armyBuilder = armyBuilderMenu;
+        deckListItem.txtMyText.text = this.attName;
+
+        numCopies++;
+
+        // check if at limit
+        if (numCopies >= maxCopies)
+        {
+            SetCardInactive();
+        }
+    }
 
     // click
     public void OnPointerClick(PointerEventData pointerEventData)
@@ -193,22 +211,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
                     return;
                 }
 
-                // add to deck list
-                armyBuilderMenu._deckCurrent.Add(thisCard);
-
-                // add visually to deck list
-                deckListItem = Instantiate(deckListItemPrefab, deckListContent.transform);
-                deckListItem.card = this.GetComponent<Card>();
-                deckListItem.armyBuilder = armyBuilderMenu;
-                deckListItem.txtMyText.text = this.attName;
-
-                numCopies++;
-
-                // check if at limit
-                if(numCopies >= maxCopies)
-                {
-                    SetCardInactive();
-                }
+                AddCardToDeck();
             }
         }
 
@@ -222,6 +225,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
             armyBuilderMenu._deckCurrent.Remove(this.GetComponent<Card>());
         }
     }
+
 
 
     public void OnPointerEnter(PointerEventData eventData)
