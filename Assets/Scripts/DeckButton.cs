@@ -7,7 +7,7 @@ using TMPro;
 public class DeckButton : MonoBehaviour, IPointerClickHandler {
 
     public TextMeshProUGUI txtName;
-
+    public ArmyBuilderMenu armyBuilderMenu;
 
 	
 	void Start ()

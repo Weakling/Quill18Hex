@@ -15,10 +15,14 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
     public Text txtDeckNameInput;
 
+    // classes
+    CardCreator cardCreator;
+
     // deck storage
     public string[] _masterDeckList;
     string strDeckDir, strMasterDeckDir;
     public DeckButton deckButtonPrefab;
+    public Transform deckButtonParent;
 
     private void Awake()
     {
@@ -36,14 +40,13 @@ public class ArmyBuilderMenu : MonoBehaviour {
         strDeckDir = "Assets/Resources/decks/";
         strMasterDeckDir = "Assets/Resources/decks/MasterDeckList.txt";
 
+        // get classes
+        cardCreator = this.GetComponent<CardCreator>();
+
         // load resources
         LoadLists();
         //LoadCardGrid();
         GONecro();
-        //SaveDeck();
-        ReadDeckList();
-
-
 	}
 
 
@@ -92,7 +95,12 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
     public void LoadDeck(string DeckName)
     {
+        string path = strDeckDir + DeckName + ".txt";
 
+        foreach (string s in _masterDeckList)
+        {
+            cardCreator.CreateCard(int.Parse(s));
+        }
     }
 
     public void ReadDeckList()
@@ -100,6 +108,13 @@ public class ArmyBuilderMenu : MonoBehaviour {
         string path = strMasterDeckDir;
         _masterDeckList = File.ReadAllLines(path);
         
+        foreach(string s in _masterDeckList)
+        {
+            DeckButton go = Instantiate(deckButtonPrefab, deckButtonParent);
+            go.txtName.text = s;
+            go.name = "btn " + s;
+            go.armyBuilderMenu = this.GetComponent<ArmyBuilderMenu>();
+        }
     }
 
     public void DeleteDeck(string DeckName)

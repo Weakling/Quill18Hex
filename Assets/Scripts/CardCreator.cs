@@ -105,11 +105,12 @@ public class CardCreator : Card {
             newCard.transform.SetParent(contentNeutral);
         }
 
+        newCard.transform.localScale = new Vector3(1, 1, 1);
         // add to card list
         _masterCardList.Add(newCard);
     }
 
-    void CreateCard(int NumberCard)
+    public void CreateCard(int NumberCard)
     {
         switch(NumberCard)
         {
@@ -120,6 +121,19 @@ public class CardCreator : Card {
             case 2:
                 break;
 
+            case 3:
+                break;
+
+            case 4:
+                break;
+
+            case 5:
+                break;
+
+            case 6:
+                break;
+
+            
                 
         }
     }
