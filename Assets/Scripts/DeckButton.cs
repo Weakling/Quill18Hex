@@ -22,7 +22,7 @@ public class DeckButton : MonoBehaviour, IPointerClickHandler {
     {
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {
-            print("Clickeme");
+            armyBuilderMenu.LoadDeck(this.txtName.text);
         }
 
         else if (pointerEventData.button == PointerEventData.InputButton.Middle)

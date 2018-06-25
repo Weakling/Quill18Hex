@@ -112,29 +112,6 @@ public class CardCreator : Card {
 
     public void CreateCard(int NumberCard)
     {
-        switch(NumberCard)
-        {
-            case 1:
-                print("moo");
-                break;
-
-            case 2:
-                break;
-
-            case 3:
-                break;
-
-            case 4:
-                break;
-
-            case 5:
-                break;
-
-            case 6:
-                break;
-
-            
-                
-        }
+        _masterCardList[NumberCard - 1].GetComponent<Card>().AddCardToDeck();
     }
 }

@@ -14,15 +14,18 @@ public class ArmyBuilderMenu : MonoBehaviour {
     public Transform deckGridNecro, deckGridTera, deckGridPhaze, deckGridNeutral;
 
     public Text txtDeckNameInput;
+    public InputField inputField;
+
+    public bool isBuildingDeck;
 
     // classes
     CardCreator cardCreator;
 
     // deck storage
-    public string[] _masterDeckList;
     string strDeckDir, strMasterDeckDir;
     public DeckButton deckButtonPrefab;
     public Transform deckButtonParent;
+
 
     private void Awake()
     {
@@ -47,6 +50,8 @@ public class ArmyBuilderMenu : MonoBehaviour {
         LoadLists();
         //LoadCardGrid();
         GONecro();
+
+        NewDeck();
 	}
 
 
@@ -58,7 +63,12 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
 
 
-
+    public void NewDeck()
+    {
+        isBuildingDeck = true;
+        ClearDeckButtons();
+        inputField.text = "";
+    }
     
 
     public void SaveDeck(string DeckName)
@@ -96,8 +106,14 @@ public class ArmyBuilderMenu : MonoBehaviour {
     public void LoadDeck(string DeckName)
     {
         string path = strDeckDir + DeckName + ".txt";
+        string[] _deckContents = File.ReadAllLines(path);
 
-        foreach (string s in _masterDeckList)
+        isBuildingDeck = true;
+        ClearDeckButtons();
+
+        inputField.text = DeckName;
+
+        foreach (string s in _deckContents)
         {
             cardCreator.CreateCard(int.Parse(s));
         }
@@ -106,8 +122,12 @@ public class ArmyBuilderMenu : MonoBehaviour {
     public void ReadDeckList()
     {
         string path = strMasterDeckDir;
-        _masterDeckList = File.ReadAllLines(path);
-        
+        string[] _masterDeckList = File.ReadAllLines(path);
+
+        isBuildingDeck = false;
+        ClearDeckButtons();
+        inputField.text = "";
+
         foreach(string s in _masterDeckList)
         {
             DeckButton go = Instantiate(deckButtonPrefab, deckButtonParent);
@@ -135,6 +155,28 @@ public class ArmyBuilderMenu : MonoBehaviour {
             }
         }
         File.WriteAllLines(path, _newDeckList.ToArray());
+
+        // change values/states
+        isBuildingDeck = false;
+        ClearDeckButtons();
+        inputField.text = "";
+
+        NewDeck();
+    }
+
+    void ClearDeckButtons()
+    {
+        foreach (Transform child in deckButtonParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach(Card card in _deckCurrent)
+        {
+            card.numCopies = 0;
+            card.SetCardActive();
+        }
+        _deckCurrent.Clear();
     }
 
     public void LoadCardGrid()
@@ -188,6 +230,11 @@ public class ArmyBuilderMenu : MonoBehaviour {
         {
             SaveDeck(txtDeckNameInput.text);
         }
+    }
+
+    public void GONewDeck()
+    {
+        NewDeck();
     }
 
     public void GOLoadDeck()

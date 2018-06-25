@@ -20,7 +20,8 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     // conditions
     [HideInInspector] public bool isClickable;
-    [HideInInspector] public int numCopies;
+    //[HideInInspector] 
+    public int numCopies;
     [HideInInspector] public int maxCopies;
 
     // enums
@@ -211,7 +212,11 @@ public class Card : MonoBehaviour, IPointerClickHandler
                     return;
                 }
 
-                AddCardToDeck();
+                if(armyBuilderMenu.isBuildingDeck)
+                {
+                    AddCardToDeck();
+                }
+                
             }
         }
 
