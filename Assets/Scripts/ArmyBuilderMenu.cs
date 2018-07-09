@@ -39,9 +39,23 @@ public class ArmyBuilderMenu : MonoBehaviour {
     
     void Start ()
     {
-        // set dir
-        strDeckDir = "Assets/Resources/decks/";
-        strMasterDeckDir = "Assets/Resources/decks/MasterDeckList.txt";
+        // check dir
+        if (Application.persistentDataPath + "/decks" == null)
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/decks");
+            Debug.LogError("created directory");
+        }
+        if(Application.persistentDataPath + "/decksmaster" == null)
+        {
+            print("did it");
+            Directory.CreateDirectory(Application.persistentDataPath + "/decksmaster");
+            File.WriteAllText(Application.persistentDataPath + "/decksmaster", "moo");
+        }
+        // set deck dir
+        strDeckDir = Application.persistentDataPath + "/decks/";
+        // set master dir
+        strMasterDeckDir = strDeckDir + "/MasterDeckList.txt";
+
 
         // get classes
         cardCreator = this.GetComponent<CardCreator>();
