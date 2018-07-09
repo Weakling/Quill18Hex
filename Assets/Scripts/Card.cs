@@ -98,9 +98,17 @@ public class Card : MonoBehaviour, IPointerClickHandler
             deckListContent = FindObjectOfType<DeckListController>().gameObject;
         }
 
-        CreatePanel();
+        //CreatePanel();
     }
-	
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            print(this.transform.GetComponent<RectTransform>().sizeDelta.x);
+        }
+    }
+    
 
     // set and create things
     void SetTextFields()
@@ -158,10 +166,12 @@ public class Card : MonoBehaviour, IPointerClickHandler
     {
         myPanel = new GameObject("myPanel").AddComponent<Image>();
         myPanel.transform.SetParent(this.transform);
-        myPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(230, 345);
+        //myPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(230, 345);
+        myPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(this.GetComponent<RectTransform>().sizeDelta.x, this.GetComponent<RectTransform>().sizeDelta.y);
         myPanel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        myPanel.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         myPanel.GetComponent<Image>().color = new Color32(0, 0, 0, 180);
-        myPanel.gameObject.SetActive(false);
+        //myPanel.gameObject.SetActive(false);
     }
 
 
@@ -169,14 +179,24 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public void SetCardActive()
     {
         isClickable = true;
-        myPanel.gameObject.SetActive(false);
+        Destroy(myPanel);
+        //myPanel.gameObject.SetActive(false);
     }
 
     public void SetCardInactive()
     {
         isClickable = false;
         deckListItem.isUnique = true;
-        myPanel.gameObject.SetActive(true);
+
+        if(myPanel != null)
+        {
+            myPanel.gameObject.SetActive(true);
+        }
+        else
+        { 
+            CreatePanel();
+        }
+        
     }
 
     public void AddCardToDeck()
