@@ -22,7 +22,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
     CardCreator cardCreator;
 
     // deck storage
-    string strDeckDir, strMasterDeckDir;
+    string strDeckDir, strMasterDeckListDir;
     public DeckButton deckButtonPrefab;
     public Transform deckButtonParent;
 
@@ -39,42 +39,20 @@ public class ArmyBuilderMenu : MonoBehaviour {
     
     void Start ()
     {
-        // check dir
-        if (Application.persistentDataPath + "/decks" == null)
-        {
-            Directory.CreateDirectory(Application.persistentDataPath + "/decks");
-            Debug.LogError("created directory");
-        }
-        if(Application.persistentDataPath + "/decksmaster" == null)
-        {
-            print("did it");
-            Directory.CreateDirectory(Application.persistentDataPath + "/decksmaster");
-            File.WriteAllText(Application.persistentDataPath + "/decksmaster", "moo");
-        }
-        // set deck dir
-        strDeckDir = Application.persistentDataPath + "/decks/";
-        // set master dir
-        strMasterDeckDir = strDeckDir + "/MasterDeckList.txt";
-
-
         // get classes
         cardCreator = this.GetComponent<CardCreator>();
 
+
+        SetDeckDirectories();
+        
         // load resources
         LoadLists();
         //LoadCardGrid();
         GONecro();
 
+        // set to make new deck
         NewDeck();
 	}
-
-
-    private void Update()
-    {
-        
-    }
-
-
 
 
     public void NewDeck()
@@ -102,10 +80,11 @@ public class ArmyBuilderMenu : MonoBehaviour {
         File.WriteAllText(path, content);
 
         // check deck list for existing
-        path = strMasterDeckDir;
+        path = strMasterDeckListDir;
         _deckList = File.ReadAllLines(path);
         foreach(string s in _deckList)
         {
+            print(s);
             if(s == DeckName)
             {
                 return;
@@ -122,11 +101,13 @@ public class ArmyBuilderMenu : MonoBehaviour {
         string path = strDeckDir + DeckName + ".txt";
         string[] _deckContents = File.ReadAllLines(path);
 
+        
+
         isBuildingDeck = true;
         ClearDeckButtons();
 
         inputField.text = DeckName;
-
+        print("this far");
         foreach (string s in _deckContents)
         {
             cardCreator.CreateCard(int.Parse(s));
@@ -135,9 +116,15 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
     public void ReadDeckList()
     {
-        string path = strMasterDeckDir;
+        string path = strMasterDeckListDir;
         string[] _masterDeckList = File.ReadAllLines(path);
 
+        if(_masterDeckList.Length < 1)
+        {
+            print("empty");
+            return;
+        }
+        print("not empty");
         isBuildingDeck = false;
         ClearDeckButtons();
         inputField.text = "";
@@ -158,7 +145,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         File.Delete(path);
 
         // delete from deck list
-        path = strMasterDeckDir;
+        path = strMasterDeckListDir;
         string[] _deckList = File.ReadAllLines(path);
         List<string> _newDeckList = new List<string>();
         foreach (string s in _deckList)
@@ -238,11 +225,36 @@ public class ArmyBuilderMenu : MonoBehaviour {
         _cardsTera = Resources.LoadAll("ready/tera", typeof(Card)).Cast<Card>().ToList();
     }
 
+    void SetDeckDirectories()
+    {
+        // set deck dir
+        strDeckDir = Application.persistentDataPath + "/decks/";
+        // set master dir
+        strMasterDeckListDir = strDeckDir + "/masterdecklist.txt";
+
+        // check dir
+        if (!Directory.Exists(strDeckDir))
+        {
+            Directory.CreateDirectory(strDeckDir);
+            Debug.LogError("created directory");
+        }
+        // check master deck list file
+        if (!File.Exists(strMasterDeckListDir))
+        {
+            File.WriteAllText(strMasterDeckListDir, "");
+            Debug.LogError("created deck list");
+        }
+    }
+
     public void GOSaveDeck()
     {
-        if (txtDeckNameInput.text.Any(char.IsLetterOrDigit))
+        if (txtDeckNameInput.text.All(char.IsLetterOrDigit))
         {
             SaveDeck(txtDeckNameInput.text);
+        }
+        else
+        {
+            Debug.LogError("INVALID NAME");
         }
     }
 
