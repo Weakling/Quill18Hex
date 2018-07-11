@@ -26,6 +26,9 @@ public class ArmyBuilderMenu : MonoBehaviour {
     public DeckButton deckButtonPrefab;
     public Transform deckButtonParent;
 
+    // warnings
+    public WarningBox warningBox;
+    //public Canvas canvasWarningBox;
 
     private void Awake()
     {
@@ -121,10 +124,8 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
         if(_masterDeckList.Length < 1)
         {
-            print("empty");
             return;
         }
-        print("not empty");
         isBuildingDeck = false;
         ClearDeckButtons();
         inputField.text = "";
@@ -142,27 +143,38 @@ public class ArmyBuilderMenu : MonoBehaviour {
     { 
         // delete txt
         string path = strDeckDir + DeckName + ".txt";
-        File.Delete(path);
-
-        // delete from deck list
-        path = strMasterDeckListDir;
-        string[] _deckList = File.ReadAllLines(path);
-        List<string> _newDeckList = new List<string>();
-        foreach (string s in _deckList)
+        if(File.Exists(path))
         {
-            if (s != DeckName)
+            File.Delete(path);
+
+            // delete from deck list
+            path = strMasterDeckListDir;
+            string[] _deckList = File.ReadAllLines(path);
+            List<string> _newDeckList = new List<string>();
+            foreach (string s in _deckList)
             {
-                _newDeckList.Add(s);
+                if (s != DeckName)
+                {
+                    _newDeckList.Add(s);
+                }
             }
+            File.WriteAllLines(path, _newDeckList.ToArray());
+
+            // change values/states
+            isBuildingDeck = false;
+            ClearDeckButtons();
+            inputField.text = "";
+
+            NewDeck();
+
+            CallWarningBox(DeckName + " was deleted");
         }
-        File.WriteAllLines(path, _newDeckList.ToArray());
 
-        // change values/states
-        isBuildingDeck = false;
-        ClearDeckButtons();
-        inputField.text = "";
-
-        NewDeck();
+        else
+        {
+            CallWarningBox("No deck with this name exists");
+        }
+        
     }
 
     void ClearDeckButtons()
@@ -246,15 +258,23 @@ public class ArmyBuilderMenu : MonoBehaviour {
         }
     }
 
+    public void CallWarningBox(string Text)
+    {
+        warningBox.SetText(Text);
+        warningBox.ValuesReset();
+    }
+
     public void GOSaveDeck()
     {
-        if (txtDeckNameInput.text.All(char.IsLetterOrDigit))
+        if (txtDeckNameInput.text != "" && txtDeckNameInput.text.All(char.IsLetterOrDigit))
         {
             SaveDeck(txtDeckNameInput.text);
+            CallWarningBox("Deck saved!");
         }
         else
         {
             Debug.LogError("INVALID NAME");
+            CallWarningBox("Deck names may only include letters and numbers..");
         }
     }
 

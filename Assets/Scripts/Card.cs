@@ -101,15 +101,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
         //CreatePanel();
     }
 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            print(this.transform.GetComponent<RectTransform>().sizeDelta.x);
-        }
-    }
-    
-
     // set and create things
     void SetTextFields()
     {
