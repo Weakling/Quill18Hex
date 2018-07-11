@@ -41,7 +41,7 @@ public class MainMenu : MonoBehaviour {
 
     public void GOLobby()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(4);
     }
 
     public void GODeckBuilder()

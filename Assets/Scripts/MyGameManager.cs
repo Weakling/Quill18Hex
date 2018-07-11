@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 
 public class MyGameManager : NetworkBehaviour
 {
-    
+
+    public PlayerController player1, player2;
+
+    // lobby
+    public TextMeshProUGUI txtReadyP1, txtReadyP2;
+
     public List<Pawn> player1Army, player2Army;
     public bool p1Ready, p2Ready, p1ArmyChosen, p2ArmyChosen;
+
+    public int number;
 
     [SyncVar]
     public int numPlayers;
@@ -43,11 +51,48 @@ public class MyGameManager : NetworkBehaviour
     }
 
     [Command]
-    void CmdSpawnMyUnit()
+    public void CmdSpawnMyUnit()
     {
         //GameObject go = Instantiate(player1Army[0].gameObject);
-        //NetworkServer.Spawn(go);
+        //NetworkServer.Spawn(go); 
     }
+
+    /*[Command]
+    public void CmdPlayerReady(int PlayerNum)
+    {
+        if(PlayerNum == 1)
+        {
+            txtReadyP1.text = "yes";
+        }
+        else if(PlayerNum == 2)
+        {
+            txtReadyP2.text = "yes";
+        }
+        
+    }*/
+
+    [Command]
+    public void CmdPlayerReady()
+    {
+        number++;
+        if (number >= 2)
+        {
+            print(number);
+        }
+    }
+
+    /*[Command]
+    public void CmdPlayerReady(PlayerController Player)
+    {
+        if(Player == player1)
+        {
+            txtReadyP1.text = "yes";
+        }
+        else if(Player == player2)
+        {
+            txtReadyP2.text = "yes";
+        }
+    }*/
 
 
 

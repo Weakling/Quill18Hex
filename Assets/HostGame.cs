@@ -20,18 +20,19 @@ public class HostGame : MonoBehaviour {
         }
     }
 
-    public void SetRoomName(string _name)
+    public void SetRoomName(string Name)
     {
-        roomName = _name;
+        roomName = Name;
     }
 
     public void CreateRoom()
     {
+        print("trying");
         if(roomName != "" && roomName != null)
         {
+            print("moo");
             Debug.Log("Creating Room: " + roomName + " with room for " + roomSize + " players");
             networkManager.matchMaker.CreateMatch(roomName, roomSize, true, "", "", "", 0, 0, networkManager.OnMatchCreate);
-
         }
     }
 }

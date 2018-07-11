@@ -10,7 +10,7 @@ public class PlayerObject : NetworkBehaviour {
 
     private void Awake()
     {
-        myGameManager = FindObjectOfType<MyGameManager>();
+        //myGameManager = FindObjectOfType<MyGameManager>();
     }
 
 
@@ -45,6 +45,6 @@ public class PlayerObject : NetworkBehaviour {
     {
         GameObject go = Instantiate(myPawn);
         NetworkServer.Spawn(go);
-        myGameManager.numPlayers++;
+        //myGameManager.numPlayers++;
     }
 }
