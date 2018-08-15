@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// moves camera in 3D scenes
+
 public class CameraControl : MonoBehaviour {
 
     private float currentRotationX, currentRotationY;

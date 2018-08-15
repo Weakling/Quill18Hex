@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn : MonoBehaviour {
+// 3D model for a unit
 
+public class Pawn : MonoBehaviour {
 
     // stats
     public int speedMax;
@@ -13,7 +14,6 @@ public class Pawn : MonoBehaviour {
 
     // abilities
     public bool flying;
-
 
     // state
     public bool isPlaced;
@@ -27,7 +27,6 @@ public class Pawn : MonoBehaviour {
     public Hex hex;
     public MapMaker mapMaker;
     public MouseManager mouseManager;
-
 
 
     private void Awake()

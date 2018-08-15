@@ -4,17 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class DeckButton : MonoBehaviour, IPointerClickHandler {
+// click to load deck
 
-    public TextMeshProUGUI txtName;
+    // if this doesn't click, I inherit now
+public class DeckButton : MyButton, IPointerClickHandler {
+
+    // objects/classes
     public ArmyBuilderMenu armyBuilderMenu;
-
-	
-	void Start ()
-    {
-		
-	}
-	
 
 
     // detect click

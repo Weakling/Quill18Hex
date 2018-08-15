@@ -7,24 +7,21 @@ using TMPro;
 
 public class MainMenu : MonoBehaviour {
 
-
-    public TextMeshProUGUI txtPlayerName;
-    public Text txtInputNewName;
+    // vars
     private string nameStore;
 
+
+    // classes
+    public TextMeshProUGUI txtPlayerName;
+    public Text txtInputNewName;
     MapMaker mapMaker;
 
     public Canvas canMainMenu, canNameChangeMenu;
 
 
-    private void Awake()
-    {
-        mapMaker = FindObjectOfType<MapMaker>();
-    }
-
     private void Start()
     {
-        txtPlayerName.text = PlayerPrefs.GetString("PlayerName", "player");
+        txtPlayerName.text = SavePPManager.GetString(SavePPManager.PrefString.PlayerName.ToString(), "player");
     }
 
 
@@ -32,12 +29,14 @@ public class MainMenu : MonoBehaviour {
     {
         mapMaker.mapMaking = !mapMaker.mapMaking;
     }
+
+
+    // change scene buttons:
+
     public void GOMainMenu()
     {
         SceneManager.LoadScene(0);
     }
-
-
 
     public void GOLobby()
     {
@@ -54,6 +53,8 @@ public class MainMenu : MonoBehaviour {
         SceneManager.LoadScene(3);
     }
 
+
+    // name change:
     public void GOChangeName()
     {
         canMainMenu.gameObject.SetActive(false);
@@ -73,7 +74,7 @@ public class MainMenu : MonoBehaviour {
 
         // set new name
         txtPlayerName.text = nameStore;
-        PlayerPrefs.SetString("PlayerName", nameStore);
+        SavePPManager.SetString(SavePPManager.PrefString.PlayerName.ToString(), nameStore);
         nameStore = "";
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class MapMaker : MonoBehaviour {
 
+    // hexes
     public GameObject grassHexPrefab, sandHexPrefab, rockHexPrefab, roadHexPrefab, lavaHexPrefab, snowHexPrefab, swampHexPrefab, dungeonHexPrefab;
     public GameObject waterHalfHexPrefab, iceHalfHexPrefab, lavaHalfHexPrefab, swampHalfHexPrefab, shadowHalfHexPrefab;
     public GameObject hexToInstantiate, defaultHexPrefab, hexPosHolder;
@@ -12,13 +13,11 @@ public class MapMaker : MonoBehaviour {
     // variables
     public bool mapMaking;
 
-    //public TileType[] tilesTypes;
     public Hex[,,,] hexMapArray;
     public GameObject[,,,] hexPosArray;
     public GameObject placeHolder;
     List<Hex> listAllHex;
     public List<Hex> listHexField;
-
 
     // size of map in terms of number of hex tiles
     public int xWidth;
@@ -60,9 +59,9 @@ public class MapMaker : MonoBehaviour {
                     xPos += xOffset / 2f;
                 }
                 // hex gameobject info
-                GameObject hex_go = (GameObject)Instantiate(defaultHexPrefab, new Vector3(xPos, 1, z * zOffset), Quaternion.identity); // instantiate
-                hex_go.name = "Base Hex_" + x + "-" + z;                                                                        // set name to reletive position
-                hex_go.transform.SetParent(this.transform);                                                                     // set parent for clean up              
+                GameObject hex_go = (GameObject)Instantiate(defaultHexPrefab, new Vector3(xPos, 1, z * zOffset), Quaternion.identity);  // instantiate
+                hex_go.name = "Base Hex_" + x + "-" + z;                                                                                // set name to reletive position
+                hex_go.transform.SetParent(this.transform);                                                                             // set parent for clean up              
                 // hex map info
                 hex_go.GetComponent<Hex>().x = x;
                 hex_go.GetComponent<Hex>().z = z;
@@ -110,9 +109,7 @@ public class MapMaker : MonoBehaviour {
 
     void Update()
     {
-
         ChangeHexType();
-        
     }
 
     public void ResetMap()
@@ -150,10 +147,6 @@ public class MapMaker : MonoBehaviour {
         }
     }
 
-    public void SaveButtonClicked()
-    {
-
-    }
 
     // save every map position as its hex type in text file
     public void SaveToFile()

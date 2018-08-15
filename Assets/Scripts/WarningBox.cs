@@ -34,7 +34,7 @@ public class WarningBox : MonoBehaviour {
         // not fading, do nothing
         if(!isFading)
         {
-            return;
+            this.gameObject.SetActive(false);
         }
 
         // fading, countdown

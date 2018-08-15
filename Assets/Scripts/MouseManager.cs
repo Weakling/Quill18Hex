@@ -23,7 +23,6 @@ public class MouseManager : MonoBehaviour {
 
     public MapMaker mapMaker;
     public Unit selectedUnit;
-    public MyPathFinder myPathFinder;
 
     // ray cast
     private Ray ray;

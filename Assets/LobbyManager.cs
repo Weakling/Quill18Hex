@@ -24,6 +24,6 @@ public class LobbyManager : MonoBehaviour {
     public void GOReady()
     {
         //myGameManager.CmdPlayerReady(myPlayer.playerNum);
-        myGameManager.CmdPlayerReady();
+        //myGameManager.CmdPlayerReady();
     }
 }

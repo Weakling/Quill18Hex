@@ -7,21 +7,22 @@ using TMPro;
 public class MyGameManager : NetworkBehaviour
 {
 
-    public PlayerController player1, player2;
+    public PlayerController player1, player2, playerRef;
 
     // lobby
-    public TextMeshProUGUI txtReadyP1, txtReadyP2;
+    public TextMeshProUGUI txtReadyP1Name, txtReadyP2Name, txtReadyP1, txtReadyP2;
 
     public List<Pawn> player1Army, player2Army;
-    public bool p1Ready, p2Ready, p1ArmyChosen, p2ArmyChosen;
-
-    public int number;
 
     [SyncVar]
+    public int numPlayersReady;
+
     public int numPlayers;
 
-    int currentTurn;
-    int phase;
+    public bool p1Ready, p2Ready, p1ArmyChosen, p2ArmyChosen;
+
+    public int currentTurn;
+    public int phase;
 
     public bool create;
 
@@ -34,67 +35,63 @@ public class MyGameManager : NetworkBehaviour
     void Start ()
     {
         print("I'm here");
-        CmdSpawnMyUnit();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
 
-
-
-    void FillArmyLists()
+    public void NetPlayerReady(bool IAmReady)//bool IAMServer)
     {
-
-    }
-
-    [Command]
-    public void CmdSpawnMyUnit()
-    {
-        //GameObject go = Instantiate(player1Army[0].gameObject);
-        //NetworkServer.Spawn(go); 
-    }
-
-    /*[Command]
-    public void CmdPlayerReady(int PlayerNum)
-    {
-        if(PlayerNum == 1)
+        /*if(IAMServer)
         {
-            txtReadyP1.text = "yes";
+            RpcPlayerReady(true);
         }
-        else if(PlayerNum == 2)
+        else
         {
-            txtReadyP2.text = "yes";
+            RpcPlayerReady(false);
+        }*/
+        //RpcPlayerReady(IAmReady);
+        if(IAmReady)
+        {
+            numPlayersReady++;
         }
-        
-    }*/
-
-    [Command]
-    public void CmdPlayerReady()
-    {
-        number++;
-        if (number >= 2)
+        else
         {
-            print(number);
+            numPlayersReady--;
         }
     }
 
-    /*[Command]
-    public void CmdPlayerReady(PlayerController Player)
+    [ClientRpc]
+    void RpcPlayerReady(bool IAmReady)//bool IAMServer)
     {
-        if(Player == player1)
+        /*if(IAMServer)
         {
-            txtReadyP1.text = "yes";
+            txtReadyP1.text = "Ready";
         }
-        else if(Player == player2)
+        else
         {
-            txtReadyP2.text = "yes";
+            txtReadyP2.text = "Ready";
+        }*/
+        if(IAmReady)
+        {
+            numPlayers++;
+
+            if (numPlayers == 1)
+            {
+                txtReadyP2.text = "Ready";
+            }
+            else if (numPlayers == 2)
+            {
+                txtReadyP1.text = "Ready";
+            }
         }
-    }*/
+        else
+        {
+            numPlayers--;
+            txtReadyP1.text = "noready";
+        }
+    }
 
-
+    
 
     /*public void PathfindMovement(int PawnSpeed)
     {

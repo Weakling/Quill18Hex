@@ -6,13 +6,16 @@ using System.Linq;
 using System.IO;
 using UnityEngine.UI;
 
+// Save decks, 
 public class ArmyBuilderMenu : MonoBehaviour {
+
 
     public List<Card> _cardsNeutral, _cardsNecro, _cardsPhaze, _cardsTera;
     public List<Card> _deckCurrent;
 
     public Transform deckGridNecro, deckGridTera, deckGridPhaze, deckGridNeutral;
 
+    // objects
     public Text txtDeckNameInput;
     public InputField inputField;
 
@@ -23,19 +26,18 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
     // deck storage
     string strDeckDir, strMasterDeckListDir;
-    public DeckButton deckButtonPrefab;
-    public Transform deckButtonParent;
+    public DeckButton deckButtonPrefab;         // clickable deck that appears in deck list
+    public Transform deckButtonParent;          
 
     // warnings
     public WarningBox warningBox;
-    //public Canvas canvasWarningBox;
 
     private void Awake()
     {
         // set state manager
         FindObjectOfType<StateManager>().armyBuilder = true;
 
-        // instantiate lists
+        // make lists for card types and decks
         CreateLists();
     }
 
@@ -45,12 +47,15 @@ public class ArmyBuilderMenu : MonoBehaviour {
         // get classes
         cardCreator = this.GetComponent<CardCreator>();
 
-
+        // set paths for deck dir
+        // create folders/files if not there
         SetDeckDirectories();
         
         // load resources
-        LoadLists();
+        //LoadLists();
         //LoadCardGrid();
+
+        // start card grid on Necro page
         GONecro();
 
         // set to make new deck
@@ -218,7 +223,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
 
 
 
-
+    // create lists for card types and decks
     void CreateLists()
     {
         _cardsNeutral = new List<Card>();
@@ -229,6 +234,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         _deckCurrent = new List<Card>();
     }
 
+    // fill faction lists with cards
     void LoadLists()
     {
         _cardsNeutral = Resources.LoadAll("ready/neutral", typeof(Card)).Cast<Card>().ToList();
@@ -237,20 +243,22 @@ public class ArmyBuilderMenu : MonoBehaviour {
         _cardsTera = Resources.LoadAll("ready/tera", typeof(Card)).Cast<Card>().ToList();
     }
 
+    
+    // REPLACED
     void SetDeckDirectories()
     {
         // set deck dir
         strDeckDir = Application.persistentDataPath + "/decks/";
-        // set master dir
+        // set master deck list dir
         strMasterDeckListDir = strDeckDir + "/masterdecklist.txt";
 
-        // check dir
+        // create directory if it doesn't exist
         if (!Directory.Exists(strDeckDir))
         {
             Directory.CreateDirectory(strDeckDir);
             Debug.LogError("created directory");
         }
-        // check master deck list file
+        // create master deck list file if it doesn't exist
         if (!File.Exists(strMasterDeckListDir))
         {
             File.WriteAllText(strMasterDeckListDir, "");
@@ -258,8 +266,10 @@ public class ArmyBuilderMenu : MonoBehaviour {
         }
     }
 
+
     public void CallWarningBox(string Text)
     {
+        warningBox.gameObject.SetActive(true);
         warningBox.SetText(Text);
         warningBox.ValuesReset();
     }
@@ -301,6 +311,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         DeleteDeck(txtDeckNameInput.text);
     }
 
+    // display Necro card grid
     public void GONecro()
     {
         deckGridNecro.gameObject.SetActive(true);
@@ -309,6 +320,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         deckGridNeutral.gameObject.SetActive(false);
     }
 
+    // display Tera card grid
     public void GOTera()
     {
         deckGridTera.gameObject.SetActive(true);
@@ -317,6 +329,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         deckGridNeutral.gameObject.SetActive(false);
     }
 
+    // display Phaze card grid
     public void GOPhaze()
     {
         deckGridPhaze.gameObject.SetActive(true);
@@ -325,6 +338,7 @@ public class ArmyBuilderMenu : MonoBehaviour {
         deckGridNeutral.gameObject.SetActive(false);
     }
 
+    // display Neutral card grid
     public void GONeutral()
     {
         deckGridNeutral.gameObject.SetActive(true);
@@ -333,9 +347,10 @@ public class ArmyBuilderMenu : MonoBehaviour {
         deckGridNecro.gameObject.SetActive(false);
     }
 
+
+    // scene changes:
     public void GOMainMenu()
     {
-        print("moop");
         SceneManager.LoadScene(0);
     }
 }

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// OLD SCRIPT
+
 public class DeckListController : MonoBehaviour {
 
+    
     /*[SerializeField]
     private GameObject buttonTemplate;
 
