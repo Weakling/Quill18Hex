@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
 
 public class MapMaker : MonoBehaviour {
 
@@ -19,6 +21,14 @@ public class MapMaker : MonoBehaviour {
     List<Hex> listAllHex;
     public List<Hex> listHexField;
 
+    // classes
+    GameManager gameManager;
+    DirectoryManager directoryManager;
+    StateManager stateManager;
+
+    // objects
+    public Text txtInputFieldMapName;
+
     // size of map in terms of number of hex tiles
     public int xWidth;
     public int zHeight;
@@ -35,6 +45,9 @@ public class MapMaker : MonoBehaviour {
     private void Awake()
     {
         listHexField = new List<Hex>();
+        gameManager = FindObjectOfType<GameManager>();
+        directoryManager = FindObjectOfType<DirectoryManager>();
+        stateManager = FindObjectOfType<StateManager>();
     }
 
     void Start ()
@@ -149,10 +162,9 @@ public class MapMaker : MonoBehaviour {
 
 
     // save every map position as its hex type in text file
-    public void SaveToFile()
+    public void SaveToFile(string MapName)
     {
-        // declare vars
-        StreamWriter writer = new StreamWriter(@"C:\MapData\Maps.txt");
+        StreamWriter writer = new StreamWriter(directoryManager.strMapDirectory + MapName + ".txt");
         //char output = 'n';
         string output = "";
         int y = 1;
@@ -199,17 +211,19 @@ public class MapMaker : MonoBehaviour {
         }
         writer.WriteLine(output);
         // close writer
-        writer.Close();                                             
+        writer.Close();
+
+        directoryManager.AddToMasterList(directoryManager.strMasterMapListDir, MapName);
     }
 
     // read text file and call MakeHex method for every line
-    public void ReadFromFile()
+    public void ReadFromFile(string MapName)
     {
         // delete all map hexes
         ResetMap();
         
         // vars
-        StreamReader reader = new StreamReader(@"C:\MapData\Maps.txt");
+        StreamReader reader = new StreamReader(directoryManager.strMapDirectory + MapName + ".txt");
         string s;
         int y = 1;
 
@@ -244,6 +258,10 @@ public class MapMaker : MonoBehaviour {
         // close reader
         reader.Close();
 
+        if(stateManager.currentGameMode == StateManager.GameMode.MapMaking)
+        {
+
+        }
         if(!mapMaking)
         {
             // get all neighbors in hex list
@@ -427,5 +445,79 @@ public class MapMaker : MonoBehaviour {
             hexToInstantiate = waterHalfHexPrefab;
         }
     }
+
+
+
+
+    // BUTTONS
+
+    public void GOSaveMap()
+    {
+        if (txtInputFieldMapName.text != "" && txtInputFieldMapName.text.All(char.IsLetterOrDigit))
+        {
+            SaveToFile(txtInputFieldMapName.text);
+        }
+    }
+
+    public void GOLoadMap()
+    {
+        
+    }
+
+
+
+    // save every map position as its hex type in text file
+    /*public void SaveToFile()
+    {
+        // declare vars
+        StreamWriter writer = new StreamWriter(@"C:\MapData\Maps.txt");
+        //char output = 'n';
+        string output = "";
+        int y = 1;
+
+        // loop through all dimensions and write hex type in text file
+        while (y < yTall)
+        {
+            #region
+            int z = 1;
+            while (z < zHeight)
+            {
+                int x = 1;
+                while (x < xWidth)
+                {
+                    //output = '0';                                   // default output to empty hex
+                    if (hexMapArray[x, y, z, 0] != null)            // check empty array..
+                    {
+                        output = output + hexMapArray[x, y, z, 0].typeHex;   // set hex type if not empty
+                    }
+                    else
+                    {
+                        output = output + "0";
+                    }
+                    //Debug.Log(output);
+                    //writer.WriteLine(output);                       // write to q 0
+
+                    //output = '0';                                   //default output to empty hex
+                    if (hexMapArray[x, y, z, 1] != null)            // check empty array..
+                    {
+                        output = output + hexMapArray[x, y, z, 1].typeHex;
+                    }
+                    else
+                    {
+                        output = output + "0";
+                    }
+                    //Debug.Log(output);
+                    //writer.WriteLine(output);                       // write to q 1
+                    x++;
+                }
+                z++;
+            }
+            y++;
+            #endregion
+        }
+        writer.WriteLine(output);
+        // close writer
+        writer.Close();
+    }*/
 
 }

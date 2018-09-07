@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     DirectoryManager directoryManager;
 
     // prefabs
-    public MyButton mapButtonPrefab, deckButtonPrefab;
+    public MyButton deckButtonPrefab, mapButtonPrefab;
 
     // objects
     public Transform deckButtonParent, mapButtonParent;
@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour {
     void Start ()
     {
         directoryManager.SetDirectories();
-        directoryManager.ReadItemList(directoryManager.strMapDirectory, mapButtonPrefab, mapButtonParent);
-        directoryManager.ReadItemList(directoryManager.strDeckDirectory, deckButtonPrefab, deckButtonParent);
+        directoryManager.ReadItemList(directoryManager.strMasterMapListDir, mapButtonPrefab, mapButtonParent);
+        //directoryManager.ReadItemList(directoryManager.strMasterDeckListDir, deckButtonPrefab, deckButtonParent);
 	}
 
 

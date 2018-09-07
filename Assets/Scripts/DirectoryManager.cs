@@ -7,12 +7,17 @@ public class DirectoryManager : MonoBehaviour {
 
 
 
-    public string strDeckDirectory = Application.persistentDataPath + "/decks/";
-    public string strMapDirectory = Application.persistentDataPath + "/maps/";
+    public string strDeckDirectory;
+    public string strMapDirectory;
 
-    string strMasterDeckListDir, strMasterMapListDir;
+    public string strMasterDeckListDir, strMasterMapListDir;
 
-
+    private void Awake()
+    {
+        strDeckDirectory = Application.persistentDataPath + "/decks/";
+        strMapDirectory = Application.persistentDataPath + "/maps/";
+    }
+    
     // set paths for deck and map dir
     // create folders/files if not there
     public void SetDirectories()
@@ -43,7 +48,7 @@ public class DirectoryManager : MonoBehaviour {
             Directory.CreateDirectory(strMapDirectory);
             Debug.LogError("created deck directory");
         }
-        // create master deck list file if it doesn't exist
+        // create master map list file if it doesn't exist
         if (!File.Exists(strMasterMapListDir))
         {
             File.WriteAllText(strMasterMapListDir, "");
@@ -67,7 +72,7 @@ public class DirectoryManager : MonoBehaviour {
         {
             MyButton go = Instantiate(ButtonPrefab, ItemParent);
             go.txtName.text = s;
-            go.name = "map btn " + s;
+            go.name = "btn " + s;
         }
     }
 
@@ -78,6 +83,25 @@ public class DirectoryManager : MonoBehaviour {
         {
             Destroy(child.gameObject);
         }
+    }
+
+    public void AddToMasterList(string Path, string ItemName)
+    {
+        // check list for entry
+        string path = Path;
+        string[] _deckList = File.ReadAllLines(path);
+        foreach (string s in _deckList)
+        {
+            print(s);
+            if (s == ItemName)
+            {
+                return;
+            }
+        }
+
+        // append new name to deck list
+        string content = ItemName + "\n";
+        File.AppendAllText(path, content);
     }
 
 
